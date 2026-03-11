@@ -1,0 +1,296 @@
+{
+  "@@locale": "zh",
+
+  "appTitle": "老母亲",
+  "@appTitle": {"description": "Application title"},
+
+  "setupWelcomeTitle": "欢迎使用老母亲",
+  "@setupWelcomeTitle": {"description": "Setup welcome title"},
+
+  "setupWelcomeSubtitle": "你的任务管理助手",
+  "@setupWelcomeSubtitle": {"description": "Setup welcome subtitle"},
+
+  "setupWelcomeButton": "开始设置",
+  "@setupWelcomeButton": {"description": "Button to start setup"},
+
+  "setupNotificationTitle": "通知权限",
+  "@setupNotificationTitle": {"description": "Setup step: notification permission title"},
+
+  "setupNotificationDesc": "老母亲需要通知权限，以便在任务截止前提醒你。",
+  "@setupNotificationDesc": {"description": "Setup step: notification permission description"},
+
+  "setupNotificationGrant": "授予通知权限",
+  "@setupNotificationGrant": {"description": "Grant notification permission button"},
+
+  "setupBackgroundTitle": "后台运行",
+  "@setupBackgroundTitle": {"description": "Setup step: background permission title"},
+
+  "setupBackgroundDesc": "允许老母亲在后台运行，以便持续追踪你的任务进度。",
+  "@setupBackgroundDesc": {"description": "Setup step: background permission description"},
+
+  "setupBackgroundGrant": "授予后台权限",
+  "@setupBackgroundGrant": {"description": "Grant background permission button"},
+
+  "setupAsrTitle": "语音输入",
+  "@setupAsrTitle": {"description": "Setup step: ASR preference title"},
+
+  "setupAsrDesc": "是否启用语音输入功能？你可以随时在设置中更改。",
+  "@setupAsrDesc": {"description": "Setup step: ASR preference description"},
+
+  "setupAsrEnable": "启用语音输入",
+  "@setupAsrEnable": {"description": "Enable ASR button"},
+
+  "setupAsrSkip": "暂不启用",
+  "@setupAsrSkip": {"description": "Skip ASR button"},
+
+  "setupSkip": "跳过",
+  "@setupSkip": {"description": "Skip current setup step"},
+
+  "setupFinish": "完成",
+  "@setupFinish": {"description": "Finish setup button"},
+
+  "setupStepOf": "{current}/{total}",
+  "@setupStepOf": {
+    "description": "Step indicator e.g. 2/4",
+    "placeholders": {
+      "current": {"type": "int"},
+      "total": {"type": "int"}
+    }
+  },
+
+  "mainGreeting": "有什么我可以帮你的？",
+  "@mainGreeting": {"description": "Initial system greeting in chat"},
+
+  "mainInputHint": "输入一个任务…",
+  "@mainInputHint": {"description": "Chat input placeholder text"},
+
+  "mainAskTasksChip": "今天做什么？",
+  "@mainAskTasksChip": {"description": "Quick-action chip to ask for task suggestions"},
+
+  "mainSetDeadline": "需要设定截止时间吗？",
+  "@mainSetDeadline": {"description": "System message asking about task deadline"},
+
+  "mainDeadlineButton": "设置时间",
+  "@mainDeadlineButton": {"description": "Button to open deadline picker"},
+
+  "mainDeadlineSkip": "跳过",
+  "@mainDeadlineSkip": {"description": "Skip setting deadline"},
+
+  "mainTaskConfirmed": "任务已添加：{title}",
+  "@mainTaskConfirmed": {
+    "description": "System confirmation after task added",
+    "placeholders": {
+      "title": {"type": "String"}
+    }
+  },
+
+  "mainTaskWithDeadline": "任务已添加：{title}，截止时间：{deadline}",
+  "@mainTaskWithDeadline": {
+    "description": "System confirmation after task added with deadline",
+    "placeholders": {
+      "title": {"type": "String"},
+      "deadline": {"type": "String"}
+    }
+  },
+
+  "mainStartTaskPrompt": "开始执行：{title}",
+  "@mainStartTaskPrompt": {
+    "description": "Message shown when user starts a task",
+    "placeholders": {
+      "title": {"type": "String"}
+    }
+  },
+
+  "mainAskTasksResponse": "（任务建议功能即将推出）",
+  "@mainAskTasksResponse": {"description": "Placeholder response for ask-tasks feature"},
+
+  "mainMicUnavailable": "语音输入功能即将推出",
+  "@mainMicUnavailable": {"description": "Snackbar when mic button tapped but ASR not available"},
+
+  "mainAskTasksBtn": "今天做什么？",
+  "@mainAskTasksBtn": {"description": "Big button to ask for task suggestions"},
+
+  "mainStartTimerBtn": "开始任务计时",
+  "@mainStartTimerBtn": {"description": "Big button to start a task timer"},
+
+  "mainStartTimerTitle": "开始计时",
+  "@mainStartTimerTitle": {"description": "Dialog title for starting a task timer"},
+
+  "mainStartTimerHint": "输入任务名称",
+  "@mainStartTimerHint": {"description": "Hint for task name in start timer dialog"},
+
+  "mainStartTimerConfirm": "开始",
+  "@mainStartTimerConfirm": {"description": "Confirm starting the timer"},
+
+  "mainStartTimerCancel": "取消",
+  "@mainStartTimerCancel": {"description": "Cancel starting the timer"},
+
+  "asrModelNotConfigured": "请先在设置中配置ASR模型",
+  "@asrModelNotConfigured": {"description": "Snackbar when mic tapped but model not configured"},
+
+  "asrRecordTitle": "语音输入",
+  "@asrRecordTitle": {"description": "Title of the ASR recording bottom sheet"},
+
+  "asrRecordHold": "按住说话",
+  "@asrRecordHold": {"description": "Hint shown on mic button before user starts recording"},
+
+  "asrRecordStop": "完成",
+  "@asrRecordStop": {"description": "Stop recording and transcribe button"},
+
+  "asrRecordCancel": "取消",
+  "@asrRecordCancel": {"description": "Cancel recording button"},
+  "asrRecordBtn": "语音输入",
+  "@asrRecordBtn": {"description": "Big button label for starting ASR voice input"},
+
+  "asrRecordProcessing": "正在识别…",
+  "@asrRecordProcessing": {"description": "Processing indicator during ASR transcription"},
+
+  "asrRecordLoading": "正在加载模型…",
+  "@asrRecordLoading": {"description": "Loading indicator while ASR model is initializing"},
+
+  "asrRecordMicError": "麦克风错误",
+  "@asrRecordMicError": {"description": "Error title when microphone fails to open"},
+
+  "asrSettingsTitle": "ASR 模型配置",
+  "@asrSettingsTitle": {"description": "ASR settings page title"},
+
+  "asrSettingsModelType": "模型类型",
+  "@asrSettingsModelType": {"description": "Label for model type dropdown"},
+
+  "asrSettingsEncoder": "Encoder 模型文件",
+  "@asrSettingsEncoder": {"description": "Label for encoder file picker"},
+
+  "asrSettingsDecoder": "Decoder 模型文件",
+  "@asrSettingsDecoder": {"description": "Label for decoder file picker"},
+
+  "asrSettingsJoiner": "Joiner 模型文件",
+  "@asrSettingsJoiner": {"description": "Label for joiner file picker"},
+
+  "asrSettingsSingle": "模型文件",
+  "@asrSettingsSingle": {"description": "Label for single model file picker (CTC)"},
+
+  "asrSettingsTokens": "词表文件 (tokens.txt)",
+  "@asrSettingsTokens": {"description": "Label for tokens file picker"},
+
+  "asrSettingsSave": "保存配置",
+  "@asrSettingsSave": {"description": "Save ASR settings button"},
+
+  "asrSettingsReset": "重置",
+  "@asrSettingsReset": {"description": "Reset ASR settings button"},
+
+  "asrSettingsSaved": "配置已保存",
+  "@asrSettingsSaved": {"description": "Snackbar when ASR settings saved successfully"},
+
+  "asrSettingsMissingFields": "请填写所有必填字段",
+  "@asrSettingsMissingFields": {"description": "Validation error for missing required fields"},
+
+  "asrSettingsPickFile": "选择文件",
+  "@asrSettingsPickFile": {"description": "File picker button label"},
+
+  "asrSettingsSelectPreset": "选择预设模型",
+  "@asrSettingsSelectPreset": {"description": "Preset selection section title in ASR settings"},
+
+  "asrSettingsModelFiles": "模型文件",
+  "@asrSettingsModelFiles": {"description": "Model files section title in ASR settings"},
+
+  "asrSetupSkip": "跳过（稍后配置）",
+  "@asrSetupSkip": {"description": "Skip ASR model setup during onboarding"},
+
+  "asrSettingsDownloadHint": "请从 sherpa-onnx 下载所需模型文件",
+  "@asrSettingsDownloadHint": {"description": "Hint about downloading model files"},
+
+  "settingsAsrModel": "ASR 模型配置",
+  "@settingsAsrModel": {"description": "Settings cell: navigate to ASR model configuration"},
+
+  "settingsAsrModelDesc": "配置离线语音识别模型",
+  "@settingsAsrModelDesc": {"description": "Settings cell description for ASR model"},
+
+  "timerElapsed": "已用时 {time}",
+  "@timerElapsed": {
+    "description": "Elapsed time label",
+    "placeholders": {
+      "time": {"type": "String"}
+    }
+  },
+
+  "timerPause": "暂停",
+  "@timerPause": {"description": "Timer pause button"},
+
+  "timerResume": "继续",
+  "@timerResume": {"description": "Timer resume button"},
+
+  "timerStop": "结束",
+  "@timerStop": {"description": "Timer stop button"},
+
+  "timerStopped": "任务已结束",
+  "@timerStopped": {"description": "Message shown when timer is stopped"},
+
+  "settingsTitle": "设置",
+  "@settingsTitle": {"description": "Settings page title"},
+
+  "settingsAsr": "语音输入",
+  "@settingsAsr": {"description": "Settings: ASR toggle label"},
+
+  "settingsAsrDesc": "使用麦克风进行语音输入",
+  "@settingsAsrDesc": {"description": "Settings: ASR toggle description"},
+
+  "settingsTheme": "主题",
+  "@settingsTheme": {"description": "Settings: theme label"},
+
+  "settingsThemeSystem": "跟随系统",
+  "@settingsThemeSystem": {"description": "Settings: theme option - system"},
+
+  "settingsThemeLight": "浅色",
+  "@settingsThemeLight": {"description": "Settings: theme option - light"},
+
+  "settingsThemeDark": "深色",
+  "@settingsThemeDark": {"description": "Settings: theme option - dark"},
+
+  "asrRecordLive": "识别中…",
+  "@asrRecordLive": {"description": "Live ASR partial result label"},
+
+  "asrRecordEmpty": "未识别到语音，请重试",
+  "@asrRecordEmpty": {"description": "Snackbar when ASR returns empty"},
+
+  "downloadTitle": "下载模型",
+  "@downloadTitle": {"description": "Model download dialog title"},
+
+  "downloadDismiss": "完成",
+  "@downloadDismiss": {"description": "Button to dismiss download dialog when done"},
+
+  "downloadExtracting": "正在解压…",
+  "@downloadExtracting": {"description": "Download stage: extracting"},
+
+  "downloadDone": "✓ 完成",
+  "@downloadDone": {"description": "Download stage: done"},
+
+  "downloadPerc": "{filename} {percent}%",
+  "@downloadPerc": {
+    "description": "Download progress line",
+    "placeholders": {
+      "filename": {"type": "String"},
+      "percent": {"type": "double", "format": "decimalPattern"}
+    }
+  },
+
+  "asrSaveAndDownload": "保存并下载模型",
+  "@asrSaveAndDownload": {"description": "Button: save preset and download models"},
+
+  "asrSettingsDownloadHint": "首次使用需要下载模型文件（约 100–400 MB），请保持网络连接。",
+  "@asrSettingsDownloadHint": {"description": "Hint about downloading model files"},
+
+  "alarmScheduled": "已为「{title}」设置 {time} 的提醒",
+  "@alarmScheduled": {
+    "description": "Confirmation message after alarm scheduled",
+    "placeholders": {
+      "title": {"type": "String"},
+      "time": {"type": "String"}
+    }
+  },
+
+  "mainSetAlarm": "设置提醒",
+  "@mainSetAlarm": {"description": "Button: schedule an alarm for this task deadline"},
+
+  "mainNoAlarm": "不设置提醒",
+  "@mainNoAlarm": {"description": "Button: skip alarm, just save deadline"}
+}

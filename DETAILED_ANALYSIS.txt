@@ -1,0 +1,1188 @@
+================================================================================
+COMPREHENSIVE LAOMUQIN PROJECT ANALYSIS
+================================================================================
+
+## PART 1: LIB_OTHER_PROJECT EXPLORATION
+================================================================================
+
+### ALL FILES LIST (59 files total)
+Organized by directory:
+
+COMPONENTS (12 files):
+- download_unzip.dart      # Download & unzip UI dialog
+- floating_btn.dart        # Floating action button
+- geo_cluster_card.dart    # Geographic clustering UI
+- md_input.dart            # Markdown input widget
+- soundviz.dart            # Sound visualization
+- spinner.dart             # Loading spinner
+- tape_button.dart         # Tape player button
+- tape.dart                # Tape UI
+- tapewheel.dart           # Tape wheel animation
+- yes_no.dart              # Yes/No dialog
+- style/popup.dart         # Popup styling
+- style/settings.dart      # Settings UI styling
+
+PAGES (14 files):
+- app.dart                 # App shell
+- default_colors.dart      # Color constants
+- home.dart                # Home page
+- home/calendar.dart       # Calendar view
+- home/map.dart            # Map view
+- home/settings.dart       # Home settings
+- md_edit.dart             # Markdown editor
+- player.dart              # Audio player
+- playlist.dart            # Playlist view
+- record.dart              # Recording page
+- search.dart              # Search page
+- geo_spatial.dart         # Geospatial view
+- geo_timeline.dart        # Timeline view
+- settings/asr_settings.dart      # ASR settings (438 lines) **KEY FILE**
+- settings/geo_settings.dart      # Geo settings
+- settings/map_settings.dart      # Map settings
+- settings/reminder_settings.dart # Reminder settings
+- settings/zdpp_settings.dart     # Punctuation settings
+- setup/master_key.dart           # Master key setup
+- setup/storage.dart              # Storage setup
+- setup/welcome.dart              # Welcome screen
+
+SERVICES (6 files):
+- encryption.dart          # Encryption service
+- geo.dart                 # Geolocation service
+- io.dart                  # I/O operations
+- reminder.dart            # Reminder service
+- secure_storage.dart      # Secure storage wrapper
+- speech.dart              # ASR & ZDPP transcription **KEY FILE**
+
+UTILS (16 files):
+- anno.dart                # Annotations
+- app_lifecycle_overlay.dart # App lifecycle handling
+- authenticator.dart       # Authentication
+- em.dart                  # Unit/spacing utilities
+- geo_cluster.dart         # Geo clustering logic
+- notifier.dart            # Change notifications
+- smooth_router.dart       # Smooth routing
+- stop_model.dart          # Stop watch model
+- text_color.dart          # Text color utilities
+- data/asr_setting.dart             # ASR configuration model (100 lines) **KEY FILE**
+- data/asr_setting.g.dart           # Generated code
+- data/geo_setting.dart             # Geo settings model
+- data/geo_setting.g.dart           # Generated code
+- data/map_setting.dart             # Map settings model
+- data/map_setting.g.dart           # Generated code
+- data/metadata.dart                # Metadata model
+- data/metadata.g.dart              # Generated code
+- data/zdpp_setting.dart            # Punctuation settings model
+- data/zdpp_setting.g.dart          # Generated code
+
+L10N & MAIN (5 files):
+- main.dart                # Entry point
+- l10n/localizations.dart  # Localization base
+- l10n/localizations_en.dart
+- l10n/localizations_zh.dart
+
+---
+
+### 1. ASR MODEL DOWNLOADING MECHANISM
+
+**File: components/download_unzip.dart (210 lines)**
+
+OVERVIEW:
+- Downloads model archives from GitHub releases
+- Tracks progress in real-time
+- Extracts to application support directory
+- Shows UI dialog with progress bars
+
+PACKAGES & APIs USED:
+1. dio (HTTP client)
+   - Method: Dio().download(url, path, onReceiveProgress: callback)
+   - Progress: Int received, Int total (raw bytes)
+
+2. archive_io (Archive extraction)
+   - Method: extractFileToDisk(srcPath, destPath)
+   - Supported formats: tar.gz, tgz, tar.bz2, tbz, tar.xz, txz, tar, zip
+
+3. path_provider (Directory access)
+   - getApplicationCacheDirectory() - temp download location
+   - getApplicationSupportDirectory() - final model location
+
+DOWNLOAD PROGRESS TRACKING:
+
+1. Stage Tracking:
+   enum DStage { downloading, unzipping, done }
+   List<(DStage, double)> progress
+   
+2. Progress Conversion:
+   double _ntrunc(double x) => (x * 10000).toInt().toDouble() / 100;
+   Converts 0-1 range to 0-100 with 2 decimal precision
+   
+3. UI Updates:
+   LinearProgressIndicator(
+     value: _perc(index) / 100,
+     backgroundColor: DefaultColors.shade_4,
+     valueColor: AlwaysStoppedAnimation(DefaultColors.constant),
+   )
+
+4. Extraction:
+   setState(() => progress[i] = (DStage.unzipping, 100));
+   await extractFileToDisk(tmpDownloadPath, widget.dest);
+   setState(() => progress[i] = (DStage.done, 100));
+
+FILE SAVE LOCATIONS:
+
+1. Temp (during download):
+   path.join(getApplicationCacheDirectory().path, basename(url))
+   Example: /cache/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20.tar.bz2
+
+2. Final (after extraction):
+   path.join(getApplicationSupportDirectory().path, extractedFolder)
+   Example: /support/sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20/
+
+3. Smart caching (line 70):
+   if (Directory(p).existsSync() || File(p).existsSync()) {
+     setState(() => progress[i] = (DStage.done, 100));
+     continue; // Skip re-download if already exists
+   }
+
+PRESET MODELS & URLs:
+
+From asr_settings.dart lines 407-455:
+
+Base URLs (locale-aware):
+- China mirror: https://ghfast.top/github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/
+- Direct: https://github.com/k2-fsa/sherpa-onnx/releases/download/asr-models/
+
+Presets available (4):
+1. sherpa-onnx-streaming-zipformer-bilingual-zh-en-2023-02-20.tar.bz2
+   - Type: transducer (3 files)
+   - Files: encoder.int8.onnx, decoder.int8.onnx, joiner.int8.onnx, tokens.txt
+
+2. sherpa-onnx-streaming-paraformer-bilingual-zh-en.tar.bz2
+   - Type: paraformer (2 files)
+   - Files: encoder.onnx, decoder.onnx, tokens.txt
+
+3. sherpa-onnx-streaming-zipformer-ctc-zh-xlarge-int8-2025-06-30.tar.bz2
+   - Type: zipformer2Ctc (1 file)
+   - Files: model.int8.onnx, tokens.txt
+
+4. sherpa-onnx-nemo-ctc-en-conformer-small.tar.bz2
+   - Type: nemoCtc (1 file)
+   - Files: model.int8.onnx, tokens.txt
+
+DOWNLOAD FLOW CODE:
+
+```dart
+Dio()
+  .download(
+    url,
+    tmpDownloadPath,
+    onReceiveProgress: (int received, int total) {
+      setState(
+        () => progress[i] = (progress[i].$1, _ntrunc(received / total))
+      );
+    },
+  )
+  .then((_) async {
+    if ([compressed formats].any((e) => base.endsWith(e))) {
+      setState(() => progress[i] = (DStage.unzipping, 100));
+      await extractFileToDisk(tmpDownloadPath, widget.dest);
+      setState(() => progress[i] = (DStage.done, 100));
+    } else {
+      File(tmpDownloadPath).renameSync(path.join(widget.dest, base));
+      setState(() => progress[i] = (DStage.done, 100));
+    }
+  });
+```
+
+---
+
+### 2. ASR INITIALIZATION & TRANSCRIPTION
+
+**File: services/speech.dart (50 lines)**
+
+OVERVIEW:
+Handles both ASR transcription and ZDPP punctuation using sherpa-onnx C++ bindings
+
+TRANSCRIPTION WORKFLOW:
+
+```dart
+static Future<String> fromWAV(
+  so.OnlineModelConfig? modelConfig,
+  so.OfflinePunctuationConfig? zdppConfig,
+  Float32List data,
+  int sampleRate,
+) async {
+  if (modelConfig == null) return "";
+  
+  // 1. Initialize Dart-C++ bindings
+  so.initBindings();
+  
+  // 2. Create recognizer with model config
+  final asrModel = so.OnlineRecognizer(
+    so.OnlineRecognizerConfig(model: modelConfig)
+  );
+  
+  // 3. Create stream for audio processing
+  final stream = asrModel.createStream();
+  
+  // 4. Feed audio data (PCM samples and sample rate)
+  stream.acceptWaveform(samples: data, sampleRate: sampleRate);
+  
+  // 5. Process stream while ready (streaming ASR)
+  while (asrModel.isReady(stream)) {
+    asrModel.decode(stream);
+  }
+  
+  // 6. Get final result
+  final res = asrModel.getResult(stream);
+  final raw = res.text;
+  
+  // 7. Cleanup (release C++ objects)
+  asrModel.free();
+  stream.free();
+  
+  // 8. Optional: Apply punctuation correction
+  if (zdppConfig == null || raw.isEmpty) {
+    return raw;
+  } else {
+    return zdpp(raw, zdppConfig);
+  }
+}
+```
+
+KEY PARAMETERS:
+- Input: Float32List (f32le PCM audio)
+- Sample rate: Passed as parameter
+- Format: Mono audio (channels implied by OnlineModelConfig)
+- Output: Text string
+
+PUNCTUATION HANDLING:
+
+```dart
+static zdpp(String input, so.OfflinePunctuationConfig zdppConfig) {
+  so.initBindings();
+  final zdppModel = so.OfflinePunctuation(config: zdppConfig);
+  final result = zdppModel.addPunct(input);
+  zdppModel.free();
+  return result;
+}
+```
+
+PACKAGES:
+- sherpa_onnx: Dart bindings for ONNX models (k2-fsa/sherpa-onnx)
+
+---
+
+### 3. SERVICE & REPOSITORY PATTERNS
+
+**File: services/secure_storage.dart (21 lines)**
+
+PATTERN: Global Singleton (NOT dependency-injected)
+
+```dart
+// Global instance - imported everywhere
+final storage = FlutterSecureStorage();
+
+// Constants
+final String ASR_MODEL_SETTINGS = "JIYI_ASR_SETTINGS";
+final String ZDPP_MODEL_SETTINGS = "JIYI_ZDPP_SETTINGS";
+final String GEO_SETTINGS = "JIYI_GEO_SETTINGS";
+final String REMINDER_ENABLED = "JIYI_REMINDER_ENABLED";
+
+// Simple wrapper functions
+Future<String?> read({required String key}) => storage.read(key: key);
+Future<void> delete({required String key}) => storage.delete(key: key);
+Future<void> write({required String key, required String? value}) =>
+    storage.write(key: key, value: value);
+```
+
+USAGE FROM UI:
+
+```dart
+import 'package:jiyi/services/secure_storage.dart' as ss;
+
+// Read settings
+final settings = await ss.read(key: ss.ASR_MODEL_SETTINGS);
+if (settings != null) {
+  _setting = AsrSetting.fromJson(settings);
+}
+
+// Write settings
+await ss.write(key: ss.ASR_MODEL_SETTINGS, value: _setting.json);
+
+// Delete settings (reset)
+await ss.write(key: ss.ASR_MODEL_SETTINGS, value: null);
+```
+
+ADVANTAGES:
+- Encrypted storage (FlutterSecureStorage)
+- Simple API
+- Direct access from any page
+
+DISADVANTAGES:
+- No dependency injection
+- Hard to test
+- Direct coupling to storage layer
+- No error handling
+- No layer separation
+
+---
+
+### 4. ASR SETTINGS PAGE
+
+**File: pages/settings/asr_settings.dart (458 lines)**
+
+OVERVIEW:
+Complete ASR configuration UI with preset support and custom file selection
+
+KEY COMPONENTS:
+
+1. Preset Selection (dropdown):
+   - Custom (manual file selection)
+   - 4 presets with auto-download on save
+
+2. Model Type Selection:
+   - transducer, paraformer, zipformer2Ctc, nemoCtc, toneCtc
+
+3. File Pickers:
+   - Encoder (transducer/paraformer)
+   - Decoder (transducer/paraformer)
+   - Joiner (transducer only)
+   - Single model (zipformer2Ctc/nemoCtc/toneCtc)
+   - Tokens file (all types)
+
+4. Buttons:
+   - Save (validates, saves, triggers download if needed)
+   - Reset (clears all settings)
+
+PRESET HANDLING:
+
+When user selects preset and clicks Save:
+```dart
+// Check if model files already downloaded
+if (_setting.name != null &&
+    !Directory(path.dirname((_setting.single ?? _setting.encoder)!))
+        .existsSync()) {
+  // If not downloaded, show download dialog
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) =>
+        DownloadUnzipDialog(urls: downloads!, dest: dest),
+  );
+}
+```
+
+VALIDATION:
+
+```dart
+// Validate all required fields exist before save
+if (_setting.tokens.isEmpty) {
+  showSnackBar("Missing tokens file");
+  return;
+}
+
+if (modelType == "transducer" &&
+    [_setting.encoder, _setting.decoder, _setting.joiner]
+        .any((x) => x == null)) {
+  showSnackBar("Missing encoder/decoder/joiner");
+  return;
+}
+
+// Similar checks for other types
+```
+
+---
+
+### 5. ASR SETTING MODEL
+
+**File: utils/data/asr_setting.dart (100 lines)**
+
+DATA STRUCTURE:
+
+```dart
+@JsonSerializable(includeIfNull: false)
+class AsrSetting {
+  String? encoder;          // For transducer/paraformer
+  String? decoder;          // For transducer/paraformer
+  String? joiner;           // For transducer only
+  String? single;           // For zipformer2Ctc/nemoCtc/toneCtc
+  String tokens;            // All types
+  String modelType;         // transducer, paraformer, etc.
+  String? name;             // Preset name if using preset
+  
+  // Factory constructors
+  factory AsrSetting.fromDyn(Map<String, dynamic> dyn) => ...
+  factory AsrSetting.fromJson(String json) => ...
+  
+  // Serialization
+  Map<String, dynamic> get dyn { ... }
+  String get json => jsonEncode(dyn);
+  
+  // Model config generation
+  so.OnlineModelConfig get model { ... }
+}
+```
+
+MODEL CONFIG GENERATION:
+
+```dart
+so.OnlineModelConfig get model {
+  if (modelType == "transducer") {
+    return so.OnlineModelConfig(
+      numThreads: 4,
+      tokens: tokens,
+      transducer: so.OnlineTransducerModelConfig(
+        encoder: encoder!,
+        decoder: decoder!,
+        joiner: joiner!,
+      ),
+    );
+  } else if (modelType == "paraformer") {
+    return so.OnlineModelConfig(
+      numThreads: 4,
+      tokens: tokens,
+      paraformer: so.OnlineParaformerModelConfig(
+        encoder: encoder!,
+        decoder: decoder!,
+      ),
+    );
+  } else if (modelType == "zipformer2Ctc") {
+    return so.OnlineModelConfig(
+      numThreads: 4,
+      tokens: tokens,
+      zipformer2Ctc: so.OnlineZipformer2CtcModelConfig(model: single!),
+    );
+  } else if (modelType == "nemoCtc") {
+    return so.OnlineModelConfig(
+      numThreads: 4,
+      tokens: tokens,
+      nemoCtc: so.OnlineNemoCtcModelConfig(model: single!),
+    );
+  } else if (modelType == "toneCtc") {
+    return so.OnlineModelConfig(
+      numThreads: 4,
+      tokens: tokens,
+      toneCtc: so.OnlineToneCtcModelConfig(model: single!),
+    );
+  }
+}
+```
+
+SETTINGS CLEANUP:
+
+When converting to JSON, fields irrelevant to model type are nulled:
+```dart
+Map<String, dynamic> get dyn {
+  final data = _$AsrSettingToJson(this);
+  if (modelType == "transducer") {
+    data["single"] = null;  // No single model for transducer
+  } else if (modelType == "zipformer2Ctc") {
+    data["decoder"] = null;
+    data["encoder"] = null;
+    data["joiner"] = null;
+  }
+  return data;
+}
+```
+
+---
+
+## PART 2: LIB/ PROJECT STRUCTURE
+================================================================================
+
+### ALL FILES LIST (25 files total)
+
+DATA LAYER (9 files):
+- data/models/
+  - asr_setting.dart        # ASR configuration (208 lines) **KEY FILE**
+  - chat_message.dart       # Chat message model
+  - task.dart               # Task/todo model
+- data/services/
+  - asr_service.dart        # ASR transcription (67 lines) **KEY FILE**
+  - permission_service.dart # Permission requests
+  - shared_preferences_service.dart # Preferences storage
+- data/repositories/
+  - settings_repository.dart # Settings business logic
+  - task_repository.dart    # Task persistence
+
+UI LAYER (16 files):
+- ui/main/
+  - main_viewmodel.dart     # Main screen ViewModel (180 lines) **KEY FILE**
+  - main_page.dart          # Main UI (354 lines) **KEY FILE**
+  - widgets/
+    - asr_recording_sheet.dart    # Recording UI (233 lines) **KEY FILE**
+    - chat_bubble.dart            # Chat message display
+    - chat_input_bar.dart         # Input bar with mic button
+    - timer_card.dart             # Timer display
+- ui/settings/
+  - settings_page.dart      # Settings UI (127 lines)
+  - settings_viewmodel.dart # Settings ViewModel (53 lines)
+  - asr_settings_page.dart  # ASR settings (349 lines) **KEY FILE**
+- ui/setup/
+  - setup_page.dart         # Setup wizard (296 lines)
+  - setup_viewmodel.dart    # Setup ViewModel (71 lines)
+
+UTILITIES & MAIN (3 files):
+- utils/command.dart        # Command pattern for async operations **KEY FILE**
+- l10n/
+  - app_localizations.dart  # Localization base
+  - app_localizations_en.dart
+  - app_localizations_zh.dart
+- app.dart                  # App widget
+- main.dart                 # Entry point
+
+---
+
+### 1. ASR MODEL WITH PRESETS
+
+**File: data/models/asr_setting.dart (208 lines)**
+
+NEW FEATURES (vs lib_other_project):
+
+1. PRESET SYSTEM WITH METADATA:
+
+```dart
+class AsrPreset {
+  final String id;              // Unique ID
+  final String name;            // Display name (Chinese)
+  final String desc;            // Description
+  final String modelType;       // transducer, paraformer, etc.
+  final String downloadUrl;     // GitHub releases link
+  final String? encoderHint;    // Expected filename
+  final String? decoderHint;
+  final String? joinerHint;
+  final String? singleHint;
+  final String tokensHint;      // Default: 'tokens.txt'
+  
+  // Computed properties
+  bool get needsEncoder => modelType == 'transducer' || modelType == 'paraformer';
+  bool get needsDecoder => modelType == 'transducer' || modelType == 'paraformer';
+  bool get needsJoiner => modelType == 'transducer';
+  bool get needsSingle => modelType == 'zipformer2Ctc' || modelType == 'nemoCtc';
+}
+
+const List<AsrPreset> kAsrPresets = [
+  AsrPreset(
+    id: 'zh_en_zipformer',
+    name: '中英双语 Zipformer (推荐)',
+    desc: '适合中英混合语音识别，性能均衡',
+    modelType: 'transducer',
+    downloadUrl: '...',
+    encoderHint: 'encoder.int8.onnx',
+    decoderHint: 'decoder.int8.onnx',
+    joinerHint: 'joiner.int8.onnx',
+  ),
+  // ... 3 more presets
+];
+```
+
+2. VALIDATION:
+
+```dart
+bool get isValid {
+  if (tokens.isEmpty) return false;
+  switch (modelType) {
+    case 'transducer':
+      return encoder != null && encoder!.isNotEmpty &&
+             decoder != null && decoder!.isNotEmpty &&
+             joiner != null && joiner!.isNotEmpty;
+    case 'paraformer':
+      return encoder != null && encoder!.isNotEmpty &&
+             decoder != null && decoder!.isNotEmpty;
+    case 'zipformer2Ctc':
+    case 'nemoCtc':
+      return single != null && single!.isNotEmpty;
+    default:
+      return false;
+  }
+}
+```
+
+3. CLEANER JSON SERIALIZATION:
+
+```dart
+factory AsrSetting.fromJson(String json) {
+  final map = jsonDecode(json) as Map<String, dynamic>;
+  return AsrSetting(
+    encoder: map['encoder'] as String?,
+    decoder: map['decoder'] as String?,
+    joiner: map['joiner'] as String?,
+    single: map['single'] as String?,
+    tokens: map['tokens'] as String,
+    modelType: map['modelType'] as String,
+    name: map['name'] as String?,
+  );
+}
+
+Map<String, dynamic> toMap() {
+  final data = <String, dynamic>{
+    'tokens': tokens,
+    'modelType': modelType,
+    if (name != null) 'name': name,
+  };
+  switch (modelType) {
+    case 'transducer':
+      data['encoder'] = encoder;
+      data['decoder'] = decoder;
+      data['joiner'] = joiner;
+    case 'paraformer':
+      data['encoder'] = encoder;
+      data['decoder'] = decoder;
+    case 'zipformer2Ctc':
+    case 'nemoCtc':
+      data['single'] = single;
+  }
+  return data;
+}
+```
+
+---
+
+### 2. ASR SERVICE WITH BACKGROUND PROCESSING
+
+**File: data/services/asr_service.dart (67 lines)**
+
+MAJOR IMPROVEMENT: Background Isolate Processing
+
+```dart
+class AsrService {
+  /// Transcribe audio in background isolate (non-blocking UI)
+  static Future<String> transcribe({
+    required String settingJson,
+    required Float32List samples,
+    required int sampleRate,
+  }) {
+    return compute(_isolateEntry, _AsrParams(
+      settingJson: settingJson,
+      samples: samples,
+      sampleRate: sampleRate,
+      token: ServicesBinding.rootIsolateToken!,  // Pass isolate token
+    ));
+  }
+  
+  /// Entry point for background isolate
+  static Future<String> _isolateEntry(_AsrParams params) async {
+    // Initialize bindings in background isolate
+    BackgroundIsolateBinaryMessenger.ensureInitialized(params.token);
+    
+    // Deserialize settings
+    final setting = AsrSetting.fromJson(params.settingJson);
+    if (!setting.isValid) return '';
+    
+    // Initialize sherpa-onnx
+    so.initBindings();
+    
+    // Create recognizer
+    final recognizer = so.OnlineRecognizer(
+      so.OnlineRecognizerConfig(model: setting.model),
+    );
+    final stream = recognizer.createStream();
+    
+    // Process audio
+    stream.acceptWaveform(samples: params.samples, sampleRate: params.sampleRate);
+    while (recognizer.isReady(stream)) {
+      recognizer.decode(stream);
+    }
+    
+    // Get result and cleanup
+    final text = recognizer.getResult(stream).text;
+    recognizer.free();
+    stream.free();
+    
+    return text;
+  }
+}
+
+class _AsrParams {
+  final String settingJson;
+  final Float32List samples;
+  final int sampleRate;
+  final RootIsolateToken token;
+}
+```
+
+KEY BENEFITS:
+1. UI remains responsive during transcription
+2. Heavy C++ binding work off main thread
+3. Result returned via Future
+4. Error handling via try-catch in caller
+
+---
+
+### 3. LAYERED ARCHITECTURE
+
+**File: data/repositories/settings_repository.dart**
+
+PATTERN: Repository + Service Separation
+
+Layer 1: UI/ViewModel
+↓
+Layer 2: Repository (Business Logic + Error Handling)
+↓
+Layer 3: Service (Low-level Storage/API)
+
+```dart
+class SettingsRepository {
+  SettingsRepository(this._service);
+  
+  final SharedPreferencesService _service;
+  final _asrController = StreamController<bool>.broadcast();
+  
+  Stream<bool> get asrStream => _asrController.stream;
+  
+  // Error handling with Result wrapper
+  Future<Result<bool>> isAsrEnabled() async {
+    try {
+      return Result.ok(await _service.isAsrEnabled());
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+  
+  Future<Result<void>> setAsrEnabled(bool value) async {
+    try {
+      await _service.setAsrEnabled(value);
+      _asrController.add(value);  // Broadcast to listeners
+      return Result.ok(null);
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+  
+  Future<Result<String?>> getAsrModelSettings() async {
+    try {
+      return Result.ok(await _service.getAsrModelSettings());
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+}
+```
+
+**File: data/services/shared_preferences_service.dart**
+
+```dart
+class SharedPreferencesService {
+  static const String _kAsrEnabled = 'asrEnabled';
+  static const String _kAsrModelSettings = 'asrModelSettings';
+  
+  Future<bool> isAsrEnabled() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_kAsrEnabled) ?? false;
+  }
+  
+  Future<void> setAsrEnabled(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kAsrEnabled, value);
+  }
+  
+  Future<String?> getAsrModelSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_kAsrModelSettings);
+  }
+  
+  Future<void> setAsrModelSettings(String? json) async {
+    final prefs = await SharedPreferences.getInstance();
+    if (json == null) {
+      await prefs.remove(_kAsrModelSettings);
+    } else {
+      await prefs.setString(_kAsrModelSettings, json);
+    }
+  }
+}
+```
+
+ADVANTAGES:
+1. Separation of concerns
+2. Testability (mock services)
+3. Error handling at repository level
+4. Stream support for reactive updates
+5. Easy to switch storage backends
+
+---
+
+### 4. COMMAND PATTERN FOR ASYNC OPERATIONS
+
+**File: utils/command.dart**
+
+PATTERN: Result-based Error Handling
+
+```dart
+// Base class for 0-argument async operations
+class Command0<T> {
+  Command0(this._function);
+  
+  final Future<Result<T>> Function() _function;
+  
+  Future<Result<T>> execute() => _function();
+}
+
+// Base class for 1-argument async operations
+class Command1<U, T> {
+  Command1(this._function);
+  
+  final Future<Result<U, T>> Function(U) _function;
+  
+  Future<Result<T>> execute(U arg) => _function(arg);
+}
+
+// Result type: Either Ok<T> or Error<E>
+sealed class Result<T> {
+  const Result();
+}
+
+class Ok<T> extends Result<T> {
+  const Ok(this.value);
+  final T value;
+}
+
+class Error<T> extends Result<T> {
+  const Error(this.error);
+  final Exception error;
+}
+```
+
+USAGE IN VIEWMODEL:
+
+```dart
+class SettingsViewModel extends ChangeNotifier {
+  late final Command0<void> load;
+  late final Command0<void> toggleAsr;
+  late final Command1<String?, void> saveAsrModelSettings;
+  
+  SettingsViewModel(this._settingsRepository) {
+    load = Command0(_load)..execute();
+    toggleAsr = Command0(_toggleAsr);
+    saveAsrModelSettings = Command1<String?, void>(_saveAsrModelSettings);
+  }
+  
+  Future<Result<void>> _load() async {
+    final asrResult = await _settingsRepository.isAsrEnabled();
+    if (asrResult is Ok<bool>) {
+      _asrEnabled = asrResult.value;
+    }
+    notifyListeners();
+    return Result.ok(null);
+  }
+  
+  Future<Result<void>> _toggleAsr() async {
+    _asrEnabled = !_asrEnabled;
+    notifyListeners();
+    return _settingsRepository.setAsrEnabled(_asrEnabled);
+  }
+  
+  Future<Result<void>> _saveAsrModelSettings(String? json) async {
+    final result = await _settingsRepository.setAsrModelSettings(json);
+    if (result is Ok) {
+      _asrModelSettingsJson = json;
+      notifyListeners();
+    }
+    return result;
+  }
+}
+```
+
+BENEFITS:
+1. Explicit error handling
+2. No exceptions thrown, predictable results
+3. Type-safe (Ok vs Error known at compile time)
+4. Chainable operations (in extension methods)
+
+---
+
+### 5. ASR RECORDING SHEET
+
+**File: ui/main/widgets/asr_recording_sheet.dart (233 lines)**
+
+OVERVIEW: Modal bottom sheet for voice recording and transcription
+
+RECORDING SETUP:
+
+```dart
+Future<void> _startRecording() async {
+  // Request microphone permission
+  if (Platform.isAndroid || Platform.isIOS) {
+    final status = await Permission.microphone.status;
+    if (!status.isGranted) {
+      await Permission.microphone.request();
+    }
+  }
+  
+  try {
+    // Initialize recorder
+    await _recorder.init(
+      channels: RecorderChannels.mono,
+      format: PCMFormat.f32le,  // 32-bit float little-endian
+    );
+    
+    _recorder.start();
+    _recorder.startStreamingData();
+    
+    // Stream audio data to buffer
+    _recorder.uint8ListStream.listen((data) {
+      if (!_cancelled) {
+        // Convert uint8 bytes to float32 samples
+        _bytes.addAll(data.toF32List(from: PCMFormat.f32le));
+      }
+    });
+    
+    // Track elapsed time
+    _startTime = DateTime.now();
+    _timer = Timer.periodic(const Duration(milliseconds: 100), (_) {
+      if (mounted && _recording) {
+        setState(() {
+          _elapsed = DateTime.now().difference(_startTime);
+        });
+      }
+    });
+    
+    if (mounted) setState(() => _recording = true);
+  } catch (e) {
+    // Error handling...
+  }
+}
+```
+
+TRANSCRIPTION:
+
+```dart
+Future<void> _done() async {
+  if (!_recording || _processing) return;
+  
+  _timer?.cancel();
+  _cancelled = true;
+  _recorder.stopStreamingData();
+  _recorder.deinit();
+  setState(() {
+    _recording = false;
+    _processing = true;  // Show spinner
+  });
+  
+  // Convert buffer to Float32List
+  final samples = Float32List.fromList(_bytes);
+  
+  String transcript = '';
+  try {
+    // Transcribe in background isolate
+    transcript = await AsrService.transcribe(
+      settingJson: widget.settingJson,
+      samples: samples,
+      sampleRate: _kSampleRate,  // 22050 Hz
+    );
+  } catch (_) {
+    transcript = '';
+  }
+  
+  // Return to caller
+  if (mounted) Navigator.pop(context, transcript);
+}
+```
+
+SAMPLE RATE:
+
+```dart
+const _kSampleRate = 22050;
+```
+
+Fixed at 22050 Hz (CD quality, mono)
+
+---
+
+### 6. ASR SETTINGS PAGE (PRESET-BASED)
+
+**File: ui/settings/asr_settings_page.dart (349 lines)**
+
+OVERVIEW:
+- Simplified UI showing 4 presets
+- File pickers for model files
+- No auto-download (manual file selection)
+
+PRESET SELECTION:
+
+```dart
+// Radio button selection with cards
+...kAsrPresets.asMap().entries.map((entry) {
+  final idx = entry.key;
+  final preset = entry.value;
+  final isSelected = idx == _selectedPreset;
+  
+  return Card(
+    child: InkWell(
+      onTap: () => setState(() => _selectedPreset = idx),
+      child: Row(
+        children: [
+          Icon(
+            isSelected ? Icons.check_circle : Icons.radio_button_unchecked,
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Text(preset.name),           // '中英双语 Zipformer (推荐)'
+                Text(preset.desc),           // '适合中英混合语音识别...'
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+})
+```
+
+FILE PICKER:
+
+```dart
+Future<void> _pickFile(TextEditingController ctrl, String hint) async {
+  final result = await FilePicker.platform.pickFiles(
+    type: FileType.any,
+    allowMultiple: false,
+  );
+  final path = result?.files.single.path;
+  if (path != null) setState(() => ctrl.text = path);
+}
+
+// Each file type has a picker:
+_buildFilePicker(l10n, l10n.asrSettingsEncoder, 'encoder.int8.onnx', _encoderCtrl)
+_buildFilePicker(l10n, l10n.asrSettingsDecoder, 'decoder.int8.onnx', _decoderCtrl)
+_buildFilePicker(l10n, l10n.asrSettingsTokens, 'tokens.txt', _tokensCtrl)
+```
+
+VALIDATION & SAVE:
+
+```dart
+Future<void> _save(AppLocalizations l10n) async {
+  final tokens = _tokensCtrl.text.trim();
+  final p = _preset;
+  
+  bool valid = tokens.isNotEmpty;
+  if (p.needsEncoder) valid = valid && _encoderCtrl.text.isNotEmpty;
+  if (p.needsDecoder) valid = valid && _decoderCtrl.text.isNotEmpty;
+  if (p.needsJoiner) valid = valid && _joinerCtrl.text.isNotEmpty;
+  if (p.needsSingle) valid = valid && _singleCtrl.text.isNotEmpty;
+  
+  if (!valid) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.asrSettingsMissingFields))
+    );
+    return;
+  }
+  
+  final setting = AsrSetting(
+    modelType: p.modelType,
+    tokens: tokens,
+    encoder: p.needsEncoder ? _encoderCtrl.text.trim() : null,
+    decoder: p.needsDecoder ? _decoderCtrl.text.trim() : null,
+    joiner: p.needsJoiner ? _joinerCtrl.text.trim() : null,
+    single: p.needsSingle ? _singleCtrl.text.trim() : null,
+  );
+  
+  setState(() => _saving = true);
+  await widget.viewModel.saveAsrModelSettings.execute(setting.toJson());
+  if (mounted) {
+    setState(() => _saving = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(l10n.asrSettingsSaved))
+    );
+  }
+}
+```
+
+RESET:
+
+```dart
+void _reset() {
+  setState(() {
+    _selectedPreset = 0;
+    _encoderCtrl.clear();
+    _decoderCtrl.clear();
+    _joinerCtrl.clear();
+    _singleCtrl.clear();
+    _tokensCtrl.clear();
+  });
+  widget.viewModel.saveAsrModelSettings.execute(null);
+}
+```
+
+---
+
+### 7. MAIN VIEWMODEL
+
+**File: ui/main/main_viewmodel.dart (180 lines)**
+
+KEY FEATURES:
+
+1. ASR Settings Integration:
+```dart
+bool _asrEnabled = false;
+bool get asrEnabled => _asrEnabled;
+
+String? _asrModelSettingsJson;
+String? get asrModelSettingsJson => _asrModelSettingsJson;
+
+Future<Result<void>> _load() async {
+  final asrResult = await _settingsRepository.isAsrEnabled();
+  if (asrResult is Ok<bool>) {
+    _asrEnabled = asrResult.value;
+  }
+  final modelResult = await _settingsRepository.getAsrModelSettings();
+  if (modelResult is Ok<String?>) {
+    _asrModelSettingsJson = modelResult.value;
+  }
+  // ...
+}
+```
+
+2. Task Management:
+- submitTask: Submit new task title
+- confirmDeadline: Set deadline or skip
+- startTask: Start timer for task
+
+3. Chat Flow:
+- Incoming messages displayed
+- User can input text or use mic
+- System prompts for deadline
+
+---
+
+### 8. SETUP FLOW
+
+**File: ui/setup/setup_page.dart (296 lines)**
+
+STEPS:
+1. Welcome
+2. Notification Permission Request
+3. Background Permission Request (ignore battery optimization)
+4. ASR Enable/Disable
+
+ON ASR ENABLED:
+- User clicks "Enable ASR"
+- Setup saves preference
+- Navigation to `AsrSettingsPage` for model configuration
+- Then navigation to `MainPage`
+
+ON ASR DISABLED:
+- User clicks "Skip"
+- Setup saves preference
+- Direct navigation to `MainPage`
+
+---
+
+## KEY COMPARISON TABLE
+
+| Aspect | lib_other_project | lib |
+|--------|-------------------|-----|
+| **ASR Download** | Dio + archive_io | None (manual) |
+| **Download UI** | Real-time progress dialog | N/A |
+| **File Extraction** | Automatic | Manual |
+| **Storage** | FlutterSecureStorage (encrypted) | SharedPreferences (plain) |
+| **Architecture** | Direct service calls | Repository pattern |
+| **Error Handling** | Exceptions thrown | Result<T> wrapper |
+| **Async Pattern** | Direct futures | Command pattern |
+| **Background Processing** | Main thread | Isolate (compute) |
+| **Punctuation (ZDPP)** | Supported | Not implemented |
+| **ASR Models** | 5 types (+ toneCtc) | 4 types |
+| **Presets** | 4 presets with download | 4 presets without download |
+| **UI Framework** | Custom styling | Material Design 3 |
+| **Permission Service** | Implicit | Explicit PermissionService |
+| **Setup Flow** | Multi-step wizard | Onboarding with ASR step |
+

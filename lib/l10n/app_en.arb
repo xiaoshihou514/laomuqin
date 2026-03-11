@@ -1,0 +1,123 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "LaoMuQin",
+
+  "setupWelcomeTitle": "Welcome to LaoMuQin",
+  "setupWelcomeSubtitle": "Your personal task assistant",
+  "setupWelcomeButton": "Get Started",
+
+  "setupNotificationTitle": "Notifications",
+  "setupNotificationDesc": "LaoMuQin needs notification permission to remind you before tasks are due.",
+  "setupNotificationGrant": "Grant Notification Permission",
+
+  "setupBackgroundTitle": "Background Access",
+  "setupBackgroundDesc": "Allow LaoMuQin to run in the background to continuously track your tasks.",
+  "setupBackgroundGrant": "Grant Background Permission",
+
+  "setupAsrTitle": "Voice Input",
+  "setupAsrDesc": "Would you like to enable voice input? You can change this anytime in Settings.",
+  "setupAsrEnable": "Enable Voice Input",
+  "setupAsrSkip": "Not Now",
+
+  "setupSkip": "Skip",
+  "setupFinish": "Done",
+
+  "setupStepOf": "{current}/{total}",
+
+  "mainGreeting": "How can I help you?",
+  "mainInputHint": "Enter a task…",
+  "mainAskTasksChip": "What to do today?",
+  "mainSetDeadline": "Would you like to set a deadline?",
+  "mainDeadlineButton": "Set Time",
+  "mainDeadlineSkip": "Skip",
+  "mainTaskConfirmed": "Task added: {title}",
+  "mainTaskWithDeadline": "Task added: {title}, due {deadline}",
+  "mainStartTaskPrompt": "Starting: {title}",
+  "mainAskTasksResponse": "(Task suggestions coming soon)",
+  "mainMicUnavailable": "Voice input coming soon",
+
+  "mainAskTasksBtn": "What to do today?",
+  "mainStartTimerBtn": "Start Task Timer",
+  "mainStartTimerTitle": "Start Timer",
+  "mainStartTimerHint": "Enter task name",
+  "mainStartTimerConfirm": "Start",
+  "mainStartTimerCancel": "Cancel",
+
+  "asrModelNotConfigured": "Please configure an ASR model in Settings first",
+  "asrRecordTitle": "Voice Input",
+  "asrRecordHold": "Hold to speak",
+  "asrRecordStop": "Done",
+  "asrRecordCancel": "Cancel",
+  "asrRecordBtn": "Record Voice",
+  "asrRecordProcessing": "Recognizing…",
+  "asrRecordLoading": "Loading model…",
+  "asrRecordMicError": "Microphone Error",
+
+  "asrSettingsTitle": "ASR Model Settings",
+  "asrSettingsModelType": "Model Type",
+  "asrSettingsEncoder": "Encoder Model File",
+  "asrSettingsDecoder": "Decoder Model File",
+  "asrSettingsJoiner": "Joiner Model File",
+  "asrSettingsSingle": "Model File",
+  "asrSettingsTokens": "Tokens File (tokens.txt)",
+  "asrSettingsSave": "Save Configuration",
+  "asrSettingsReset": "Reset",
+  "asrSettingsSaved": "Configuration saved",
+  "asrSettingsMissingFields": "Please fill in all required fields",
+  "asrSettingsPickFile": "Pick File",
+  "asrSettingsSelectPreset": "Select Model Preset",
+  "asrSettingsModelFiles": "Model Files",
+  "asrSetupSkip": "Skip (configure later)",
+  "asrSettingsDownloadHint": "Download model files from the sherpa-onnx releases page",
+
+  "settingsAsrModel": "ASR Model Settings",
+  "settingsAsrModelDesc": "Configure offline speech recognition model",
+
+  "timerElapsed": "Elapsed {time}",
+  "timerPause": "Pause",
+  "timerResume": "Resume",
+  "timerStop": "Stop",
+  "timerStopped": "Task ended",
+
+  "settingsTitle": "Settings",
+  "settingsAsr": "Voice Input",
+  "settingsAsrDesc": "Use microphone for voice input",
+  "settingsTheme": "Theme",
+
+  "settingsThemeSystem": "System",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
+
+  "asrRecordLive": "Recognising…",
+  "asrRecordEmpty": "Speech not recognised, please try again",
+
+  "downloadTitle": "Downloading Models",
+  "downloadDismiss": "Done",
+  "downloadExtracting": "Extracting…",
+  "downloadDone": "✓ Done",
+  "downloadPerc": "{filename} {percent}%",
+  "@downloadPerc": {
+    "placeholders": {
+      "filename": {"type": "String"},
+      "percent": {"type": "double", "format": "decimalPattern"}
+    }
+  },
+
+  "asrSaveAndDownload": "Save & Download Model",
+  "asrSettingsDownloadHint": "First use requires downloading model files (~100–400 MB). Please stay connected.",
+
+  "alarmScheduled": "Reminder set for \"{title}\" at {time}",
+  "@alarmScheduled": {
+    "placeholders": {
+      "title": {"type": "String"},
+      "time": {"type": "String"}
+    }
+  },
+
+  "mainSetAlarm": "Set Reminder",
+  "@mainSetAlarm": {"description": "Button: schedule an alarm for this task deadline"},
+
+  "mainNoAlarm": "No Reminder",
+  "@mainNoAlarm": {"description": "Button: skip alarm, just save deadline"}
+}
