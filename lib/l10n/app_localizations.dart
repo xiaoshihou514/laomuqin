@@ -302,6 +302,30 @@ abstract class AppLocalizations {
   /// **'取消'**
   String get mainStartTimerCancel;
 
+  /// Bottom sheet title for choosing a task to time
+  ///
+  /// In zh, this message translates to:
+  /// **'选择要计时的任务'**
+  String get mainStartTimerPickTask;
+
+  /// Snackbar when timer is requested but there are no pending tasks
+  ///
+  /// In zh, this message translates to:
+  /// **'当前没有可计时的待办任务'**
+  String get mainStartTimerNoTasks;
+
+  /// Subtitle for a task without deadline in timer picker
+  ///
+  /// In zh, this message translates to:
+  /// **'无截止时间'**
+  String get mainStartTimerNoDeadline;
+
+  /// Subtitle for a task with deadline in timer picker
+  ///
+  /// In zh, this message translates to:
+  /// **'截止时间：{deadline}'**
+  String mainStartTimerDeadline(String deadline);
+
   /// Snackbar when mic tapped but model not configured
   ///
   /// In zh, this message translates to:
@@ -535,6 +559,30 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'深色'**
   String get settingsThemeDark;
+
+  /// Settings action to export tasks to JSON
+  ///
+  /// In zh, this message translates to:
+  /// **'导出任务'**
+  String get settingsExportTasks;
+
+  /// Description for export tasks action
+  ///
+  /// In zh, this message translates to:
+  /// **'将当前任务列表导出为 Downloads 中的 JSON 文件'**
+  String get settingsExportTasksDesc;
+
+  /// Snackbar after exporting tasks successfully
+  ///
+  /// In zh, this message translates to:
+  /// **'任务已导出到：{path}'**
+  String settingsExportTasksSuccess(String path);
+
+  /// Snackbar after export task failure
+  ///
+  /// In zh, this message translates to:
+  /// **'导出任务失败'**
+  String get settingsExportTasksFailed;
 
   /// Live ASR partial result label
   ///

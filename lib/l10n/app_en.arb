@@ -43,6 +43,15 @@
   "mainStartTimerHint": "Enter task name",
   "mainStartTimerConfirm": "Start",
   "mainStartTimerCancel": "Cancel",
+  "mainStartTimerPickTask": "Choose a task to time",
+  "mainStartTimerNoTasks": "There are no pending tasks to time yet",
+  "mainStartTimerNoDeadline": "No deadline",
+  "mainStartTimerDeadline": "Due {deadline}",
+  "@mainStartTimerDeadline": {
+    "placeholders": {
+      "deadline": {"type": "String"}
+    }
+  },
 
   "asrModelNotConfigured": "Please configure an ASR model in Settings first",
   "asrRecordTitle": "Voice Input",
@@ -88,6 +97,15 @@
   "settingsThemeSystem": "System",
   "settingsThemeLight": "Light",
   "settingsThemeDark": "Dark",
+  "settingsExportTasks": "Export tasks",
+  "settingsExportTasksDesc": "Write the current task list to a JSON file in Downloads",
+  "settingsExportTasksSuccess": "Tasks exported to {path}",
+  "@settingsExportTasksSuccess": {
+    "placeholders": {
+      "path": {"type": "String"}
+    }
+  },
+  "settingsExportTasksFailed": "Failed to export tasks",
 
   "asrRecordLive": "Recognising…",
   "asrRecordEmpty": "Speech not recognised, please try again",

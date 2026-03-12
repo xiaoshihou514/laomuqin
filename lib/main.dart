@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'app.dart';
+import 'data/repositories/export_repository.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/task_repository.dart';
+import 'data/repositories/timer_session_repository.dart';
 import 'data/services/alarm_service.dart';
+import 'data/services/export_service.dart';
 import 'data/services/permission_service.dart';
 import 'data/services/shared_preferences_service.dart';
 import 'ui/main/main_viewmodel.dart';
@@ -22,6 +25,8 @@ void main() async {
 
   final settingsRepository = SettingsRepository(prefsService);
   final taskRepository = TaskRepository();
+  final timerSessionRepository = TimerSessionRepository();
+  final exportRepository = ExportRepository(ExportService());
 
   final onboardingResult = await settingsRepository.isOnboardingDone();
   final showSetup = switch (onboardingResult) {
@@ -37,9 +42,15 @@ void main() async {
   final mainViewModel = MainViewModel(
     settingsRepository: settingsRepository,
     taskRepository: taskRepository,
+    timerSessionRepository: timerSessionRepository,
   );
 
-  final settingsViewModel = SettingsViewModel(settingsRepository, permissionService);
+  final settingsViewModel = SettingsViewModel(
+    settingsRepository,
+    permissionService,
+    taskRepository,
+    exportRepository,
+  );
 
   runApp(App(
     settingsRepository: settingsRepository,

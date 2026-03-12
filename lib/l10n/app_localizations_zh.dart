@@ -119,6 +119,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get mainStartTimerCancel => '取消';
 
   @override
+  String get mainStartTimerPickTask => '选择要计时的任务';
+
+  @override
+  String get mainStartTimerNoTasks => '当前没有可计时的待办任务';
+
+  @override
+  String get mainStartTimerNoDeadline => '无截止时间';
+
+  @override
+  String mainStartTimerDeadline(String deadline) {
+    return '截止时间：$deadline';
+  }
+
+  @override
   String get asrModelNotConfigured => '请先在设置中配置ASR模型';
 
   @override
@@ -236,6 +250,20 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsThemeDark => '深色';
+
+  @override
+  String get settingsExportTasks => '导出任务';
+
+  @override
+  String get settingsExportTasksDesc => '将当前任务列表导出为 Downloads 中的 JSON 文件';
+
+  @override
+  String settingsExportTasksSuccess(String path) {
+    return '任务已导出到：$path';
+  }
+
+  @override
+  String get settingsExportTasksFailed => '导出任务失败';
 
   @override
   String get asrRecordLive => '识别中…';

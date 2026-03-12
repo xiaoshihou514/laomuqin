@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:sherpa_onnx/sherpa_onnx.dart' as so;
@@ -16,14 +14,11 @@ Future<String> _transcribeAudio(Map<String, dynamic> params) async {
   // Load native sherpa-onnx bindings (fast, idempotent).
   so.initBindings();
 
-  print("start transcribe");
   final setting = AsrSetting.fromJson(params['settingJson'] as String);
   final samples = params['samples'] as Float32List;
   final sampleRate = params['sampleRate'] as int;
 
   // Fresh recognizer + fresh stream per call — no state contamination.
-  print(setting);
-  print(setting.model);
   final recognizer = so.OnlineRecognizer(
     so.OnlineRecognizerConfig(model: setting.model),
   );
@@ -35,7 +30,6 @@ Future<String> _transcribeAudio(Map<String, dynamic> params) async {
     recognizer.decode(stream);
   }
   final text = recognizer.getResult(stream).text;
-  print("ASR: $text");
 
   stream.free();
   recognizer.free();

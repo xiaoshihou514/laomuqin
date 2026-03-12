@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../../data/models/chat_message.dart';
 
@@ -15,26 +16,24 @@ class ChatBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       child: Row(
-        mainAxisAlignment:
-            isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: isUser
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!isUser) ...[
             CircleAvatar(
               radius: 16,
               backgroundColor: colorScheme.primaryContainer,
-              child: Icon(
-                Icons.person,
-                size: 18,
-                color: colorScheme.onPrimaryContainer,
-              ),
+              child: TDImage(assetUrl: "assets/icon.png"),
             ),
             const SizedBox(width: 8),
           ],
           Flexible(
             child: Column(
-              crossAxisAlignment:
-                  isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment: isUser
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(

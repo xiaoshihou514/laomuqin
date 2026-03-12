@@ -90,6 +90,40 @@ class SettingsRepository {
     }
   }
 
+  Future<Result<int>> getRecommendationIndex() async {
+    try {
+      return Result.ok(await _service.getRecommendationIndex());
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  Future<Result<void>> setRecommendationIndex(int index) async {
+    try {
+      await _service.setRecommendationIndex(index);
+      return Result.ok(null);
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  Future<Result<String?>> getRecommendationSignature() async {
+    try {
+      return Result.ok(await _service.getRecommendationSignature());
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  Future<Result<void>> setRecommendationSignature(String signature) async {
+    try {
+      await _service.setRecommendationSignature(signature);
+      return Result.ok(null);
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
   static ThemeMode _parseThemeMode(String raw) => switch (raw) {
         'light' => ThemeMode.light,
         'dark' => ThemeMode.dark,

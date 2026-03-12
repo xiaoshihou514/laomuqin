@@ -122,6 +122,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mainStartTimerCancel => 'Cancel';
 
   @override
+  String get mainStartTimerPickTask => 'Choose a task to time';
+
+  @override
+  String get mainStartTimerNoTasks => 'There are no pending tasks to time yet';
+
+  @override
+  String get mainStartTimerNoDeadline => 'No deadline';
+
+  @override
+  String mainStartTimerDeadline(String deadline) {
+    return 'Due $deadline';
+  }
+
+  @override
   String get asrModelNotConfigured =>
       'Please configure an ASR model in Settings first';
 
@@ -242,6 +256,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsThemeDark => 'Dark';
+
+  @override
+  String get settingsExportTasks => 'Export tasks';
+
+  @override
+  String get settingsExportTasksDesc =>
+      'Write the current task list to a JSON file in Downloads';
+
+  @override
+  String settingsExportTasksSuccess(String path) {
+    return 'Tasks exported to $path';
+  }
+
+  @override
+  String get settingsExportTasksFailed => 'Failed to export tasks';
 
   @override
   String get asrRecordLive => 'Recognising…';

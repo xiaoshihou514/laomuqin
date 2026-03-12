@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/command.dart';
 import '../../l10n/app_localizations.dart';
 import 'asr_settings_page.dart';
 import 'settings_viewmodel.dart';
@@ -112,6 +113,50 @@ class _SettingsView extends StatelessWidget {
               ),
             ),
           ]),
+          const SizedBox(height: 4),
+          sectionCard([
+            ListenableBuilder(
+              listenable: viewModel.exportTasks,
+              builder: (context, _) => ListTile(
+                leading: const Icon(Icons.download_outlined),
+                title: Text(l10n.settingsExportTasks),
+                subtitle: Text(
+                  l10n.settingsExportTasksDesc,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                ),
+                trailing: viewModel.exportTasks.running
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: colorScheme.primary,
+                        ),
+                      )
+                    : Icon(
+                        Icons.chevron_right,
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                onTap: viewModel.exportTasks.running
+                    ? null
+                    : () async {
+                        await viewModel.exportTasks.execute();
+                        if (!context.mounted) return;
+                        final result = viewModel.exportTasks.result;
+                        final messenger = ScaffoldMessenger.of(context);
+                        final text = switch (result) {
+                          Ok<String>(:final value) =>
+                            l10n.settingsExportTasksSuccess(value),
+                          Error<String>() => l10n.settingsExportTasksFailed,
+                          _ => l10n.settingsExportTasksFailed,
+                        };
+                        messenger.showSnackBar(SnackBar(content: Text(text)));
+                      },
+              ),
+            ),
+          ]),
         ],
       ),
     );
@@ -194,5 +239,4 @@ class _ThemeModeSelector extends StatelessWidget {
     );
   }
 }
-
 

@@ -6,10 +6,18 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../../l10n/app_localizations.dart';
 
 class TimerCard extends StatefulWidget {
-  const TimerCard({super.key, required this.taskTitle, required this.onStop});
+  const TimerCard({
+    super.key,
+    required this.taskTitle,
+    required this.onStop,
+  });
 
   final String taskTitle;
-  final VoidCallback onStop;
+  final Future<void> Function(
+    Duration elapsed,
+    DateTime startedAt,
+    DateTime endedAt,
+  ) onStop;
 
   @override
   State<TimerCard> createState() => _TimerCardState();
@@ -17,12 +25,14 @@ class TimerCard extends StatefulWidget {
 
 class _TimerCardState extends State<TimerCard> {
   late final Stopwatch _stopwatch;
+  late final DateTime _startedAt;
   Timer? _ticker;
   bool _paused = false;
 
   @override
   void initState() {
     super.initState();
+    _startedAt = DateTime.now();
     _stopwatch = Stopwatch()..start();
     _ticker = Timer.periodic(const Duration(seconds: 1), (_) {
       if (mounted) setState(() {});
@@ -101,7 +111,13 @@ class _TimerCardState extends State<TimerCard> {
                 type: TDButtonType.fill,
                 theme: TDButtonTheme.danger,
                 size: TDButtonSize.small,
-                onTap: widget.onStop,
+                onTap: () async {
+                  await widget.onStop(
+                    elapsed,
+                    _startedAt,
+                    DateTime.now(),
+                  );
+                },
               ),
             ],
           ),

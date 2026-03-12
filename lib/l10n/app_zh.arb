@@ -125,6 +125,23 @@
   "mainStartTimerCancel": "取消",
   "@mainStartTimerCancel": {"description": "Cancel starting the timer"},
 
+  "mainStartTimerPickTask": "选择要计时的任务",
+  "@mainStartTimerPickTask": {"description": "Bottom sheet title for choosing a task to time"},
+
+  "mainStartTimerNoTasks": "当前没有可计时的待办任务",
+  "@mainStartTimerNoTasks": {"description": "Snackbar when timer is requested but there are no pending tasks"},
+
+  "mainStartTimerNoDeadline": "无截止时间",
+  "@mainStartTimerNoDeadline": {"description": "Subtitle for a task without deadline in timer picker"},
+
+  "mainStartTimerDeadline": "截止时间：{deadline}",
+  "@mainStartTimerDeadline": {
+    "description": "Subtitle for a task with deadline in timer picker",
+    "placeholders": {
+      "deadline": {"type": "String"}
+    }
+  },
+
   "asrModelNotConfigured": "请先在设置中配置ASR模型",
   "@asrModelNotConfigured": {"description": "Snackbar when mic tapped but model not configured"},
 
@@ -245,6 +262,23 @@
 
   "settingsThemeDark": "深色",
   "@settingsThemeDark": {"description": "Settings: theme option - dark"},
+
+  "settingsExportTasks": "导出任务",
+  "@settingsExportTasks": {"description": "Settings action to export tasks to JSON"},
+
+  "settingsExportTasksDesc": "将当前任务列表导出为 Downloads 中的 JSON 文件",
+  "@settingsExportTasksDesc": {"description": "Description for export tasks action"},
+
+  "settingsExportTasksSuccess": "任务已导出到：{path}",
+  "@settingsExportTasksSuccess": {
+    "description": "Snackbar after exporting tasks successfully",
+    "placeholders": {
+      "path": {"type": "String"}
+    }
+  },
+
+  "settingsExportTasksFailed": "导出任务失败",
+  "@settingsExportTasksFailed": {"description": "Snackbar after export task failure"},
 
   "asrRecordLive": "识别中…",
   "@asrRecordLive": {"description": "Live ASR partial result label"},

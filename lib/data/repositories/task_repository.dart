@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../models/task.dart';
 import '../../utils/command.dart';
+import '../models/task.dart';
 
 class TaskRepository {
   static const String _kTasks = 'tasks';
@@ -11,6 +11,13 @@ class TaskRepository {
   final List<Task> _tasks = [];
 
   List<Task> get tasks => List.unmodifiable(_tasks);
+
+  Task? getTaskById(String id) {
+    for (final task in _tasks) {
+      if (task.id == id) return task;
+    }
+    return null;
+  }
 
   Future<Result<void>> loadTasks() async {
     try {
@@ -20,7 +27,7 @@ class TaskRepository {
         final list = jsonDecode(json) as List<dynamic>;
         _tasks
           ..clear()
-          ..addAll(list.map(_fromJson));
+          ..addAll(list.map((item) => Task.fromJson(item as Map<String, dynamic>)));
       }
       return Result.ok(null);
     } on Exception catch (e) {
@@ -63,31 +70,7 @@ class TaskRepository {
 
   Future<void> _persist() async {
     final prefs = await SharedPreferences.getInstance();
-    final json = jsonEncode(_tasks.map(_toJson).toList());
+    final json = jsonEncode(_tasks.map((task) => task.toJson()).toList());
     await prefs.setString(_kTasks, json);
-  }
-
-  Map<String, dynamic> _toJson(Task t) => {
-        'id': t.id,
-        'title': t.title,
-        'terminationTime': t.terminationTime?.toIso8601String(),
-        'status': t.status.name,
-        'alarmId': t.alarmId,
-      };
-
-  Task _fromJson(dynamic json) {
-    final map = json as Map<String, dynamic>;
-    return Task(
-      id: map['id'] as String,
-      title: map['title'] as String,
-      terminationTime: map['terminationTime'] != null
-          ? DateTime.parse(map['terminationTime'] as String)
-          : null,
-      status: TaskStatus.values.firstWhere(
-        (s) => s.name == map['status'],
-        orElse: () => TaskStatus.pending,
-      ),
-      alarmId: map['alarmId'] as int?,
-    );
   }
 }

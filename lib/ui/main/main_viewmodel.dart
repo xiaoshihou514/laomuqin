@@ -5,8 +5,10 @@ import 'package:intl/intl.dart';
 
 import '../../data/models/chat_message.dart';
 import '../../data/models/task.dart';
+import '../../data/models/timer_session.dart';
 import '../../data/repositories/settings_repository.dart';
 import '../../data/repositories/task_repository.dart';
+import '../../data/repositories/timer_session_repository.dart';
 import '../../data/services/alarm_service.dart';
 import '../../utils/command.dart';
 
@@ -16,8 +18,10 @@ class MainViewModel extends ChangeNotifier {
   MainViewModel({
     required SettingsRepository settingsRepository,
     required TaskRepository taskRepository,
+    required TimerSessionRepository timerSessionRepository,
   })  : _settingsRepository = settingsRepository,
-        _taskRepository = taskRepository {
+        _taskRepository = taskRepository,
+        _timerSessionRepository = timerSessionRepository {
     load = Command0(_load)..execute();
     submitTask = Command1<String, void>(_submitTask);
     confirmDeadline = Command1<(DateTime?, bool), void>(_confirmDeadline);
@@ -36,6 +40,7 @@ class MainViewModel extends ChangeNotifier {
 
   final SettingsRepository _settingsRepository;
   final TaskRepository _taskRepository;
+  final TimerSessionRepository _timerSessionRepository;
 
   late final StreamSubscription<bool> _asrSub;
   late final StreamSubscription<String?> _asrModelSub;
@@ -60,6 +65,8 @@ class MainViewModel extends ChangeNotifier {
   late final Command1<String, void> startTask;
   late final Command0<void> askTasks;
 
+  List<Task> get timerCandidates => _sortedPendingTasks();
+
   @override
   void dispose() {
     _asrSub.cancel();
@@ -77,6 +84,7 @@ class MainViewModel extends ChangeNotifier {
       _asrModelSettingsJson = modelResult.value;
     }
     await _taskRepository.loadTasks();
+    await _timerSessionRepository.loadSessions();
     _addMessage(ChatMessage(
       id: _newId(),
       type: ChatMessageType.system,
@@ -132,40 +140,62 @@ class MainViewModel extends ChangeNotifier {
   }
 
   Future<Result<void>> _startTask(String title) async {
+    final task = _taskRepository.getTaskById(title);
+    if (task == null) {
+      return Result.ok(null);
+    }
     _addMessage(ChatMessage(
       id: _newId(),
       type: ChatMessageType.timer,
-      content: '',
+      content: task.title,
       timestamp: DateTime.now(),
-      taskId: title,
+      taskId: task.id,
     ));
     notifyListeners();
     return Result.ok(null);
   }
 
   Future<Result<void>> _askTasks() async {
-    final pending = _taskRepository.tasks
-        .where((t) => t.status == TaskStatus.pending)
-        .toList()
-      ..sort((a, b) {
-        if (a.terminationTime == null && b.terminationTime == null) return 0;
-        if (a.terminationTime == null) return 1;
-        if (b.terminationTime == null) return -1;
-        return a.terminationTime!.compareTo(b.terminationTime!);
-      });
+    final pending = _sortedPendingTasks();
 
     final String content;
     if (pending.isEmpty) {
       content = '🎉 暂无待办任务，休息一下吧！';
     } else {
-      final fmt = DateFormat('MM/dd HH:mm');
-      final lines = pending.take(10).map((t) {
-        final deadline = t.terminationTime != null
-            ? '  ⏰ ${fmt.format(t.terminationTime!)}'
-            : '';
-        return '• ${t.title}$deadline';
-      });
-      content = '📋 待办任务（${pending.length} 项）：\n${lines.join('\n')}';
+      final currentSignature = _recommendationSignature(pending);
+      var nextIndex = 0;
+
+      final storedSignatureResult =
+          await _settingsRepository.getRecommendationSignature();
+      final storedIndexResult = await _settingsRepository.getRecommendationIndex();
+      String? storedSignature;
+      int? storedIndex;
+
+      if (storedSignatureResult case Ok<String?>(:final value)) {
+        storedSignature = value;
+      }
+      if (storedIndexResult case Ok<int>(:final value)) {
+        storedIndex = value;
+      }
+
+      if (storedSignature == currentSignature && storedIndex != null) {
+        nextIndex = storedIndex;
+      }
+
+      if (nextIndex >= pending.length) {
+        nextIndex = 0;
+      }
+
+      final task = pending[nextIndex];
+      final deadline = task.terminationTime != null
+          ? '（截止 ${DateFormat('MM/dd HH:mm').format(task.terminationTime!)}）'
+          : '（无截止时间）';
+      content = '建议先做：${task.title}$deadline';
+
+      await _settingsRepository.setRecommendationSignature(currentSignature);
+      await _settingsRepository.setRecommendationIndex(
+        (nextIndex + 1) % pending.length,
+      );
     }
 
     _addMessage(ChatMessage(
@@ -178,10 +208,30 @@ class MainViewModel extends ChangeNotifier {
     return Result.ok(null);
   }
 
-  void resolveTimerStop(String taskId) {
+  Future<void> resolveTimerStop(
+    String taskId,
+    Duration elapsed,
+    DateTime startedAt,
+    DateTime endedAt,
+  ) async {
     final idx = _messages.indexWhere(
       (m) => m.type == ChatMessageType.timer && m.taskId == taskId,
     );
+    final task = _taskRepository.getTaskById(taskId);
+    if (task != null) {
+      final session = TimerSession(
+        id: _newId(),
+        taskId: task.id,
+        taskTitleSnapshot: task.title,
+        startedAt: startedAt,
+        endedAt: endedAt,
+        elapsedSeconds: elapsed.inSeconds,
+      );
+      await _timerSessionRepository.addSession(session);
+      await _taskRepository.updateTask(
+        task.copyWith(trackedSeconds: task.trackedSeconds + elapsed.inSeconds),
+      );
+    }
     if (idx != -1) {
       _messages[idx] = _messages[idx].copyWith(
         content: '任务已结束',
@@ -234,6 +284,39 @@ class MainViewModel extends ChangeNotifier {
     _messages.add(msg);
   }
 
+  List<Task> _sortedPendingTasks() {
+    final indexed = _taskRepository.tasks
+        .asMap()
+        .entries
+        .where((entry) => entry.value.status == TaskStatus.pending)
+        .toList();
+
+    indexed.sort((a, b) {
+      final left = a.value;
+      final right = b.value;
+      if (left.terminationTime == null && right.terminationTime == null) {
+        return a.key.compareTo(b.key);
+      }
+      if (left.terminationTime == null) return 1;
+      if (right.terminationTime == null) return -1;
+      final deadlineCompare =
+          left.terminationTime!.compareTo(right.terminationTime!);
+      if (deadlineCompare != 0) return deadlineCompare;
+      return a.key.compareTo(b.key);
+    });
+
+    return indexed.map((entry) => entry.value).toList();
+  }
+
+  String _recommendationSignature(List<Task> tasks) {
+    return tasks
+        .map(
+          (task) =>
+              '${task.id}:${task.terminationTime?.millisecondsSinceEpoch ?? 'none'}:${task.status.name}',
+        )
+        .join('|');
+  }
+
   ChatMessage _makeUserMessage(String content) => ChatMessage(
         id: _newId(),
         type: ChatMessageType.user,
@@ -243,4 +326,3 @@ class MainViewModel extends ChangeNotifier {
 
   String _newId() => DateTime.now().microsecondsSinceEpoch.toString();
 }
-

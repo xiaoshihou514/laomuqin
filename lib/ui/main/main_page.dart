@@ -83,9 +83,9 @@ class _MainViewState extends State<_MainView> {
 
     final settingsJson = vm.asrModelSettingsJson;
     if (settingsJson == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(l10n.asrModelNotConfigured)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.asrModelNotConfigured)));
       return;
     }
 
@@ -106,28 +106,77 @@ class _MainViewState extends State<_MainView> {
   Future<void> _onStartTimer(BuildContext context) async {
     final vm = context.read<MainViewModel>();
     final l10n = AppLocalizations.of(context)!;
-    final nameCtrl = TextEditingController();
+    final tasks = vm.timerCandidates;
+    if (tasks.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(l10n.mainStartTimerNoTasks)));
+      return;
+    }
 
-    final title = await showDialog<String>(
+    final taskId = await showModalBottomSheet<String>(
       context: context,
-      builder: (ctx) => TDInputDialog(
-        textEditingController: nameCtrl,
-        title: l10n.mainStartTimerTitle,
-        hintText: l10n.mainStartTimerHint,
-        leftBtn: TDDialogButtonOptions(
-          title: l10n.mainStartTimerCancel,
-          action: () => Navigator.pop(ctx),
-        ),
-        rightBtn: TDDialogButtonOptions(
-          title: l10n.mainStartTimerConfirm,
-          action: () => Navigator.pop(ctx, nameCtrl.text),
-        ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
+      builder: (ctx) {
+        final maxSheetHeight = MediaQuery.of(ctx).size.height * 0.7;
+        return SafeArea(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxSheetHeight),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          l10n.mainStartTimerPickTask,
+                          style: Theme.of(ctx).textTheme.titleMedium,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx),
+                        child: Text(l10n.mainStartTimerCancel),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: tasks.length,
+                    separatorBuilder: (_, _) => const Divider(height: 1),
+                    itemBuilder: (ctx, index) {
+                      final task = tasks[index];
+                      final subtitle = task.terminationTime != null
+                          ? l10n.mainStartTimerDeadline(
+                              '${task.terminationTime!.year}-'
+                              '${task.terminationTime!.month.toString().padLeft(2, '0')}-'
+                              '${task.terminationTime!.day.toString().padLeft(2, '0')} '
+                              '${task.terminationTime!.hour.toString().padLeft(2, '0')}:'
+                              '${task.terminationTime!.minute.toString().padLeft(2, '0')}',
+                            )
+                          : l10n.mainStartTimerNoDeadline;
+                      return ListTile(
+                        title: Text(task.title),
+                        subtitle: Text(subtitle),
+                        onTap: () => Navigator.pop(ctx, task.id),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
 
-    nameCtrl.dispose();
-    if (title != null && title.trim().isNotEmpty) {
-      vm.startTask.execute(title.trim());
+    if (taskId != null && taskId.trim().isNotEmpty) {
+      vm.startTask.execute(taskId.trim());
       _scrollToBottom();
     }
   }
@@ -142,7 +191,6 @@ class _MainViewState extends State<_MainView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.appTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings_outlined),
@@ -174,10 +222,7 @@ class _MainViewState extends State<_MainView> {
                   itemBuilder: (context, index) {
                     final msg = messages[index];
                     if (msg.type == ChatMessageType.timer) {
-                      return _TimerMessageItem(
-                        message: msg,
-                        viewModel: vm,
-                      );
+                      return _TimerMessageItem(message: msg, viewModel: vm);
                     }
                     return ChatBubble(message: msg);
                   },
@@ -275,8 +320,13 @@ class _DeadlineActionsState extends State<_DeadlineActions> {
     if (!mounted) return;
 
     final deadline = pickedTime != null
-        ? DateTime(picked.year, picked.month, picked.day, pickedTime.hour,
-            pickedTime.minute)
+        ? DateTime(
+            picked.year,
+            picked.month,
+            picked.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          )
         : picked;
 
     setState(() => _pickedDeadline = deadline);
@@ -289,9 +339,9 @@ class _DeadlineActionsState extends State<_DeadlineActions> {
 
     final formatted = deadline != null
         ? '${deadline.year}-${deadline.month.toString().padLeft(2, '0')}-'
-            '${deadline.day.toString().padLeft(2, '0')} '
-            '${deadline.hour.toString().padLeft(2, '0')}:'
-            '${deadline.minute.toString().padLeft(2, '0')}'
+              '${deadline.day.toString().padLeft(2, '0')} '
+              '${deadline.hour.toString().padLeft(2, '0')}:'
+              '${deadline.minute.toString().padLeft(2, '0')}'
         : null;
 
     final msg = formatted != null
@@ -403,9 +453,9 @@ class _TimerMessageItem extends StatelessWidget {
     }
 
     return TimerCard(
-      taskTitle: taskId,
-      onStop: () => viewModel.resolveTimerStop(taskId),
+      taskTitle: message.content,
+      onStop: (elapsed, startedAt, endedAt) =>
+          viewModel.resolveTimerStop(taskId, elapsed, startedAt, endedAt),
     );
   }
 }
-
