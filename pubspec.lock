@@ -2,7 +2,7 @@
 # See https://dart.dev/tools/pub/glossary#lockfile
 packages:
   archive:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: archive
       sha256: a96e8b390886ee8abb49b7bd3ac8df6f451c621619f52a26e815fdcf568959ff
@@ -89,22 +89,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.7.12"
-  dio:
-    dependency: "direct main"
-    description:
-      name: dio
-      sha256: aff32c08f92787a557dd5c0145ac91536481831a01b4648136373cddb0e64f8c
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.9.2"
-  dio_web_adapter:
-    dependency: transitive
-    description:
-      name: dio_web_adapter
-      sha256: "2f9e64323a7c3c7ef69567d5c800424a11f8337b8b228bad02524c9fb3c1f340"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.1.2"
   easy_refresh:
     dependency: transitive
     description:
@@ -145,14 +129,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "7.0.1"
-  file_picker:
-    dependency: "direct main"
-    description:
-      name: file_picker
-      sha256: "09b474c0c8117484b80cbebc043801ff91e05cfbd2874d512825c899e1754694"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "9.2.3"
   file_selector_linux:
     dependency: transitive
     description:
@@ -259,14 +235,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.0.33"
-  flutter_recorder:
-    dependency: "direct main"
-    description:
-      name: flutter_recorder
-      sha256: bccb7b0b0727f094d575b8d6f7a349a17c61252d25f3528f2b53b51380c2c096
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.1.2"
   flutter_slidable:
     dependency: transitive
     description:
@@ -733,54 +701,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "2.4.1"
-  sherpa_onnx:
-    dependency: "direct main"
-    description:
-      name: sherpa_onnx
-      sha256: "3e864a08018656f1c51d17a0aa43d021a2f78a7bb5cff15476d5a0dc4dff2956"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.12.28"
-  sherpa_onnx_android:
-    dependency: transitive
-    description:
-      name: sherpa_onnx_android
-      sha256: bc690be549b33ff0bc5d518ca9b4df1013a175ef84c25646298d1bedd3a6e305
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.12.28"
-  sherpa_onnx_ios:
-    dependency: transitive
-    description:
-      name: sherpa_onnx_ios
-      sha256: "4f0bba765dafd9c9062a3be062aa11f7a012a0b34964244e3588c824d5fd6bbc"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.12.28"
-  sherpa_onnx_linux:
-    dependency: transitive
-    description:
-      name: sherpa_onnx_linux
-      sha256: bcad6925062f7a79a4f3b4b672d2485f5b02074e31d5b7f0a4f1ddf718a8a821
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.12.28"
-  sherpa_onnx_macos:
-    dependency: transitive
-    description:
-      name: sherpa_onnx_macos
-      sha256: d6718808d4384e2babca6718b9bac668e98ed8d00a1492ac4d09ecf2b406f6e6
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.12.28"
-  sherpa_onnx_windows:
-    dependency: transitive
-    description:
-      name: sherpa_onnx_windows
-      sha256: ef6bc7a4c313d8ca710513a206fb650c4527e955068d8b4137b5a846f4809ead
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.12.28"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -890,14 +810,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "15.0.2"
-  wav:
-    dependency: "direct main"
-    description:
-      name: wav
-      sha256: "2c932c74a531befedcb1d44bb24dd95fea8c801590d560c73fa94f35c5ef6551"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "1.5.0"
   web:
     dependency: transitive
     description:
@@ -906,14 +818,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.1.1"
-  win32:
-    dependency: transitive
-    description:
-      name: win32
-      sha256: d7cb55e04cd34096cd3a79b3330245f54cb96a370a1c27adb3c84b917de8b08e
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "5.15.0"
   xdg_directories:
     dependency: transitive
     description:

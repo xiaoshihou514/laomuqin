@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
+import 'data/repositories/screen_usage_repository.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/task_repository.dart';
 import 'data/repositories/timer_analytics_repository.dart';
@@ -18,6 +19,7 @@ class App extends StatelessWidget {
   const App({
     super.key,
     required this.settingsRepository,
+    required this.screenUsageRepository,
     required this.taskRepository,
     required this.timerSessionRepository,
     required this.timerAnalyticsRepository,
@@ -28,6 +30,7 @@ class App extends StatelessWidget {
   });
 
   final SettingsRepository settingsRepository;
+  final ScreenUsageRepository screenUsageRepository;
   final TaskRepository taskRepository;
   final TimerSessionRepository timerSessionRepository;
   final TimerAnalyticsRepository timerAnalyticsRepository;
@@ -40,6 +43,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider.value(value: screenUsageRepository),
         Provider.value(value: timerSessionRepository),
         Provider.value(value: timerAnalyticsRepository),
         ChangeNotifierProvider.value(value: setupViewModel),

@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">laomuqin</string>
+  <string name="screen_usage_notification_channel_name">Screen usage collection</string>
+  <string name="screen_usage_notification_channel_desc">Collect and save daily screen usage statistics</string>
+  <string name="screen_usage_notification_title">Saving screen usage statistics</string>
+  <string name="screen_usage_notification_text">LaoMuQin is organizing today\'s app usage data.</string>
 </resources>

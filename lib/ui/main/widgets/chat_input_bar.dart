@@ -8,16 +8,10 @@ class ChatInputBar extends StatefulWidget {
     super.key,
     required this.controller,
     required this.onSend,
-    required this.asrEnabled,
-    required this.onMicTap,
   });
 
-  /// External controller — lets callers pre-fill text (e.g., from ASR).
   final TextEditingController controller;
   final ValueChanged<String> onSend;
-  final bool asrEnabled;
-  /// Called when the mic button is tapped (only relevant when asrEnabled).
-  final VoidCallback onMicTap;
 
   @override
   State<ChatInputBar> createState() => _ChatInputBarState();
@@ -75,90 +69,17 @@ class _ChatInputBarState extends State<ChatInputBar> {
       ),
       child: SafeArea(
         top: false,
-        child: widget.asrEnabled
-            ? _AsrInputRow(
-                controller: widget.controller,
-                colorScheme: colorScheme,
-                l10n: l10n,
-                hasText: _hasText,
-                onSend: _send,
-                onMicTap: widget.onMicTap,
-              )
-            : _TextInputRow(
-                controller: widget.controller,
-                colorScheme: colorScheme,
-                l10n: l10n,
-                hasText: _hasText,
-                onSend: _send,
-              ),
+        child: _TextInputRow(
+          controller: widget.controller,
+          colorScheme: colorScheme,
+          l10n: l10n,
+          hasText: _hasText,
+          onSend: _send,
+        ),
       ),
     );
   }
 }
-
-// ── ASR mode: large mic button on left, compact text field on right ─────────
-
-class _AsrInputRow extends StatelessWidget {
-  const _AsrInputRow({
-    required this.controller,
-    required this.colorScheme,
-    required this.l10n,
-    required this.hasText,
-    required this.onSend,
-    required this.onMicTap,
-  });
-
-  final TextEditingController controller;
-  final ColorScheme colorScheme;
-  final AppLocalizations l10n;
-  final bool hasText;
-  final VoidCallback onSend;
-  final VoidCallback onMicTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        // Large mic button (primary input when ASR configured)
-        GestureDetector(
-          onTap: onMicTap,
-          child: Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: colorScheme.primary,
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Icon(TDIcons.microphone, color: colorScheme.onPrimary, size: 28),
-          ),
-        ),
-        const SizedBox(width: 8),
-        // Compact text field (secondary / fallback)
-        Expanded(
-          child: TDInput(
-            controller: controller,
-            hintText: l10n.mainInputHint,
-            backgroundColor: colorScheme.surfaceContainerHighest,
-            textStyle: TextStyle(color: colorScheme.onSurface),
-            hintTextStyle: TextStyle(color: colorScheme.onSurfaceVariant),
-            cursorColor: colorScheme.primary,
-            onSubmitted: (_) => onSend(),
-          ),
-        ),
-        IconButton(
-          icon: Icon(
-            TDIcons.send,
-            color: hasText ? colorScheme.primary : colorScheme.outline,
-          ),
-          onPressed: hasText ? onSend : null,
-        ),
-      ],
-    );
-  }
-}
-
-// ── Normal mode: full-width text field + send button ───────────────────────
 
 class _TextInputRow extends StatelessWidget {
   const _TextInputRow({
@@ -202,4 +123,3 @@ class _TextInputRow extends StatelessWidget {
     );
   }
 }
-

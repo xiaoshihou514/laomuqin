@@ -9,8 +9,33 @@ import '../../data/models/timer_analytics.dart';
 import '../../l10n/app_localizations.dart';
 import 'analytics_viewmodel.dart';
 
-class AnalyticsPage extends StatelessWidget {
+class AnalyticsPage extends StatefulWidget {
   const AnalyticsPage({super.key});
+
+  @override
+  State<AnalyticsPage> createState() => _AnalyticsPageState();
+}
+
+class _AnalyticsPageState extends State<AnalyticsPage>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed && mounted) {
+      context.read<AnalyticsViewModel>().load.execute();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +64,15 @@ class _AnalyticsView extends StatelessWidget {
     final snapshot = viewModel.snapshot;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.analyticsTitle)),
+      appBar: AppBar(
+        title: Text(l10n.analyticsTitle),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () => viewModel.load.execute(),
+          ),
+        ],
+      ),
       body: ListenableBuilder(
         listenable: viewModel.load,
         builder: (context, _) {
@@ -78,15 +111,31 @@ class _AnalyticsView extends StatelessWidget {
             );
           }
 
+          final allSeries = [...snapshot.series, ...snapshot.screenSeries];
           final colorMap = <String, Color>{};
-          for (var i = 0; i < snapshot.series.length; i++) {
-            colorMap[snapshot.series[i].key] =
-                _seriesColors[i % _seriesColors.length];
+          for (var i = 0; i < allSeries.length; i++) {
+            colorMap[allSeries[i].key] = _seriesColors[i % _seriesColors.length];
           }
 
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              if (!snapshot.screenUsageAccessGranted)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _SectionCard(
+                    title: l10n.analyticsUsagePermissionTitle,
+                    subtitle: l10n.analyticsUsagePermissionDesc,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: FilledButton.icon(
+                        onPressed: () => viewModel.openUsageAccess.execute(),
+                        icon: const Icon(Icons.open_in_new),
+                        label: Text(l10n.analyticsUsagePermissionAction),
+                      ),
+                    ),
+                  ),
+                ),
               _SectionCard(
                 title: l10n.analyticsRecentByTaskTitle,
                 subtitle: l10n.analyticsRecentByTaskDesc,
@@ -132,6 +181,76 @@ class _AnalyticsView extends StatelessWidget {
                     _buildHourlyChart(context, snapshot.hourlyBuckets),
                   ),
                 ),
+              ),
+              const SizedBox(height: 12),
+              _SectionCard(
+                title: l10n.analyticsScreenAppsTitle,
+                subtitle: l10n.analyticsScreenAppsDesc,
+                child: snapshot.hasScreenUsageData
+                    ? Column(
+                        children: [
+                          SizedBox(
+                            height: 260,
+                            child: BarChart(
+                              _buildScreenAppsChart(
+                                context,
+                                snapshot.screenDailyAppStacks,
+                                snapshot.screenSeries,
+                                colorMap,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: snapshot.screenSeries
+                                  .map(
+                                    (series) => _LegendChip(
+                                      color: colorMap[series.key]!,
+                                      label: series.label,
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(l10n.analyticsScreenUnavailable),
+              ),
+              const SizedBox(height: 12),
+              _SectionCard(
+                title: l10n.analyticsScreenTotalsTitle,
+                subtitle: l10n.analyticsScreenTotalsDesc,
+                child: snapshot.hasScreenUsageData
+                    ? SizedBox(
+                        height: 260,
+                        child: BarChart(
+                          _buildScreenTotalsChart(
+                            context,
+                            snapshot.screenDailyTotals,
+                          ),
+                        ),
+                      )
+                    : Text(l10n.analyticsScreenUnavailable),
+              ),
+              const SizedBox(height: 12),
+              _SectionCard(
+                title: l10n.analyticsWorkVsScreenTitle,
+                subtitle: l10n.analyticsWorkVsScreenDesc,
+                child: snapshot.hasScreenUsageData
+                    ? SizedBox(
+                        height: 260,
+                        child: BarChart(
+                          _buildWorkVsScreenChart(
+                            context,
+                            snapshot.workScreenComparisons,
+                          ),
+                        ),
+                      )
+                    : Text(l10n.analyticsScreenUnavailable),
               ),
               const SizedBox(height: 12),
               _SectionCard(
@@ -252,6 +371,166 @@ class _AnalyticsView extends StatelessWidget {
             ),
           )
           .toList(),
+    );
+  }
+
+  BarChartData _buildScreenAppsChart(
+    BuildContext context,
+    List<DailyAppUsageStack> dailyStacks,
+    List<TimerAnalyticsSeries> series,
+    Map<String, Color> colorMap,
+  ) {
+    final maxY = _maxHours(
+      dailyStacks
+          .map((item) => (item.totalMilliseconds / 1000).round())
+          .toList(),
+    );
+
+    return BarChartData(
+      alignment: BarChartAlignment.spaceAround,
+      maxY: maxY,
+      barTouchData: BarTouchData(enabled: false),
+      borderData: FlBorderData(show: false),
+      gridData: FlGridData(show: true, horizontalInterval: _intervalFor(maxY)),
+      titlesData: _titles(
+        context,
+        bottomBuilder: (value, _) {
+          final index = value.toInt();
+          if (index < 0 || index >= dailyStacks.length) {
+            return const SizedBox.shrink();
+          }
+          return Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(DateFormat('M/d').format(dailyStacks[index].day)),
+          );
+        },
+      ),
+      barGroups: List.generate(dailyStacks.length, (index) {
+        final day = dailyStacks[index];
+        var cursor = 0.0;
+        final stacks = <BarChartRodStackItem>[];
+        for (final item in series) {
+          final millis = day.millisecondsBySeries[item.key] ?? 0;
+          if (millis == 0) continue;
+          final next = cursor + millis / 3600000.0;
+          stacks.add(BarChartRodStackItem(cursor, next, colorMap[item.key]!));
+          cursor = next;
+        }
+        return BarChartGroupData(
+          x: index,
+          barRods: [
+            BarChartRodData(
+              toY: day.totalMilliseconds / 3600000.0,
+              width: 22,
+              borderRadius: BorderRadius.circular(4),
+              rodStackItems: stacks,
+            ),
+          ],
+        );
+      }),
+    );
+  }
+
+  BarChartData _buildScreenTotalsChart(
+    BuildContext context,
+    List<DailyScreenTimeBucket> buckets,
+  ) {
+    final maxY = _maxHours(
+      buckets.map((item) => (item.totalMilliseconds / 1000).round()).toList(),
+    );
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return BarChartData(
+      alignment: BarChartAlignment.spaceAround,
+      maxY: maxY,
+      barTouchData: BarTouchData(enabled: false),
+      borderData: FlBorderData(show: false),
+      gridData: FlGridData(show: true, horizontalInterval: _intervalFor(maxY)),
+      titlesData: _titles(
+        context,
+        bottomBuilder: (value, _) {
+          final index = value.toInt();
+          if (index < 0 || index >= buckets.length) {
+            return const SizedBox.shrink();
+          }
+          return Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(DateFormat('M/d').format(buckets[index].day)),
+          );
+        },
+      ),
+      barGroups: List.generate(
+        buckets.length,
+        (index) => BarChartGroupData(
+          x: index,
+          barRods: [
+            BarChartRodData(
+              toY: buckets[index].totalMilliseconds / 3600000.0,
+              width: 22,
+              color: colorScheme.tertiary,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  BarChartData _buildWorkVsScreenChart(
+    BuildContext context,
+    List<DailyWorkScreenComparison> buckets,
+  ) {
+    final values = buckets
+        .expand<int>(
+          (item) => [
+            item.workSeconds,
+            (item.screenMilliseconds / 1000).round(),
+          ],
+        )
+        .toList();
+    final maxY = _maxHours(values);
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return BarChartData(
+      alignment: BarChartAlignment.spaceAround,
+      maxY: maxY,
+      barTouchData: BarTouchData(enabled: false),
+      borderData: FlBorderData(show: false),
+      gridData: FlGridData(show: true, horizontalInterval: _intervalFor(maxY)),
+      titlesData: _titles(
+        context,
+        bottomBuilder: (value, _) {
+          final index = value.toInt();
+          if (index < 0 || index >= buckets.length) {
+            return const SizedBox.shrink();
+          }
+          return Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: Text(DateFormat('M/d').format(buckets[index].day)),
+          );
+        },
+      ),
+      barGroups: List.generate(
+        buckets.length,
+        (index) => BarChartGroupData(
+          x: index,
+          barsSpace: 4,
+          barRods: [
+            BarChartRodData(
+              toY: buckets[index].workSeconds / 3600.0,
+              width: 10,
+              color: colorScheme.primary,
+              borderRadius: BorderRadius.circular(3),
+            ),
+            BarChartRodData(
+              toY: buckets[index].screenMilliseconds / 3600000.0,
+              width: 10,
+              color: colorScheme.tertiary,
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

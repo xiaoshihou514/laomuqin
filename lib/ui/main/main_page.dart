@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../data/repositories/screen_usage_repository.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../data/models/chat_message.dart';
@@ -7,7 +9,6 @@ import '../../l10n/app_localizations.dart';
 import '../settings/settings_page.dart';
 import '../settings/settings_viewmodel.dart';
 import 'main_viewmodel.dart';
-import 'widgets/asr_recording_sheet.dart';
 import 'widgets/chat_bubble.dart';
 import 'widgets/chat_input_bar.dart';
 import 'widgets/timer_card.dart';
@@ -36,6 +37,10 @@ class _MainViewState extends State<_MainView> {
   void initState() {
     super.initState();
     _inputController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      context.read<ScreenUsageRepository>().ensureBackgroundCollectionScheduled();
+    });
   }
 
   @override
@@ -75,32 +80,6 @@ class _MainViewState extends State<_MainView> {
       _scrollToBottom();
     });
     _scrollToBottom();
-  }
-
-  Future<void> _onMicTap(BuildContext context) async {
-    final vm = context.read<MainViewModel>();
-    final l10n = AppLocalizations.of(context)!;
-
-    final settingsJson = vm.asrModelSettingsJson;
-    if (settingsJson == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text(l10n.asrModelNotConfigured)));
-      return;
-    }
-
-    final transcript = await showModalBottomSheet<String>(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-      ),
-      builder: (_) => AsrRecordingSheet(settingJson: settingsJson),
-    );
-
-    if (transcript != null && transcript.isNotEmpty) {
-      _inputController.text = transcript;
-    }
   }
 
   Future<void> _onStartTimer(BuildContext context) async {
@@ -272,9 +251,7 @@ class _MainViewState extends State<_MainView> {
             listenable: vm,
             builder: (_, _) => ChatInputBar(
               controller: _inputController,
-              asrEnabled: vm.asrEnabled,
               onSend: (text) => _onSend(context, text),
-              onMicTap: () => _onMicTap(context),
             ),
           ),
         ],

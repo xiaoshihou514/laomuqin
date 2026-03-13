@@ -11,20 +11,11 @@ class PermissionService {
     return status.isGranted;
   }
 
-  Future<bool> requestMicrophone() async {
-    final status = await Permission.microphone.request();
-    return status.isGranted;
-  }
-
   Future<bool> isNotificationGranted() async {
     return Permission.notification.isGranted;
   }
 
   Future<bool> isIgnoreBatteryOptimizationsGranted() async {
     return Permission.ignoreBatteryOptimizations.isGranted;
-  }
-
-  Future<bool> isMicrophoneGranted() async {
-    return Permission.microphone.isGranted;
   }
 }

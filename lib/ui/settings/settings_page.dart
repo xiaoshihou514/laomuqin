@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/repositories/screen_usage_repository.dart';
 import '../../data/repositories/timer_analytics_repository.dart';
-import '../../utils/command.dart';
 import '../../l10n/app_localizations.dart';
+import '../../utils/command.dart';
 import '../analytics/analytics_page.dart';
 import '../analytics/analytics_viewmodel.dart';
-import 'asr_settings_page.dart';
 import 'settings_viewmodel.dart';
 
 class SettingsPage extends StatelessWidget {
@@ -38,13 +38,6 @@ class _SettingsView extends StatelessWidget {
           child: Column(children: tiles),
         );
 
-    Widget divider() => Divider(
-          height: 1,
-          indent: 16,
-          endIndent: 16,
-          color: colorScheme.outlineVariant.withAlpha(128),
-        );
-
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.settingsTitle),
@@ -53,46 +46,6 @@ class _SettingsView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 8),
         children: [
-          // ASR section
-          sectionCard([
-            ListenableBuilder(
-              listenable: viewModel,
-              builder: (context, _) => SwitchListTile(
-                title: Text(l10n.settingsAsr),
-                subtitle: Text(
-                  l10n.settingsAsrDesc,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                ),
-                value: viewModel.asrEnabled,
-                onChanged: (_) => viewModel.toggleAsr.execute(),
-              ),
-            ),
-            if (viewModel.asrEnabled) ...[
-              divider(),
-              ListTile(
-                title: Text(l10n.settingsAsrModel),
-                subtitle: Text(
-                  l10n.settingsAsrModelDesc,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                ),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  color: colorScheme.onSurfaceVariant,
-                ),
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => AsrSettingsPage(viewModel: viewModel),
-                  ),
-                ),
-              ),
-            ],
-          ]),
-          const SizedBox(height: 4),
-          // Theme section
           sectionCard([
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
@@ -133,10 +86,13 @@ class _SettingsView extends StatelessWidget {
               ),
               onTap: () {
                 final repo = context.read<TimerAnalyticsRepository>();
+                final screenUsageRepository =
+                    context.read<ScreenUsageRepository>();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => ChangeNotifierProvider(
-                      create: (_) => AnalyticsViewModel(repo),
+                      create: (_) =>
+                          AnalyticsViewModel(repo, screenUsageRepository),
                       child: const AnalyticsPage(),
                     ),
                   ),
@@ -258,14 +214,23 @@ class _ThemeModeSelector extends StatelessWidget {
 
     return Row(
       children: [
-        option(ThemeMode.system, l10n.settingsThemeSystem,
-            Icons.brightness_auto_outlined),
+        option(
+          ThemeMode.system,
+          l10n.settingsThemeSystem,
+          Icons.brightness_auto_outlined,
+        ),
         const SizedBox(width: 8),
-        option(ThemeMode.light, l10n.settingsThemeLight,
-            Icons.light_mode_outlined),
+        option(
+          ThemeMode.light,
+          l10n.settingsThemeLight,
+          Icons.light_mode_outlined,
+        ),
         const SizedBox(width: 8),
-        option(ThemeMode.dark, l10n.settingsThemeDark,
-            Icons.dark_mode_outlined),
+        option(
+          ThemeMode.dark,
+          l10n.settingsThemeDark,
+          Icons.dark_mode_outlined,
+        ),
       ],
     );
   }

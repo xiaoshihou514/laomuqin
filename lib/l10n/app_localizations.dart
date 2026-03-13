@@ -715,6 +715,84 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'不设置提醒'**
   String get mainNoAlarm;
+
+  /// Setup step: usage access title
+  ///
+  /// In zh, this message translates to:
+  /// **'屏幕使用情况权限'**
+  String get setupUsageAccessTitle;
+
+  /// Setup step: usage access description
+  ///
+  /// In zh, this message translates to:
+  /// **'允许老母亲读取 Android 的屏幕使用统计，以便生成每日工作与应用使用图表。'**
+  String get setupUsageAccessDesc;
+
+  /// Button to open Android usage access settings
+  ///
+  /// In zh, this message translates to:
+  /// **'打开使用情况访问设置'**
+  String get setupUsageAccessGrant;
+
+  /// Title for analytics permission prompt
+  ///
+  /// In zh, this message translates to:
+  /// **'开启屏幕使用情况访问'**
+  String get analyticsUsagePermissionTitle;
+
+  /// Description for analytics permission prompt
+  ///
+  /// In zh, this message translates to:
+  /// **'授予 Android 使用情况访问权限后，统计页将显示按应用和总量汇总的屏幕使用图表。'**
+  String get analyticsUsagePermissionDesc;
+
+  /// Button to open Android usage access settings
+  ///
+  /// In zh, this message translates to:
+  /// **'打开系统设置'**
+  String get analyticsUsagePermissionAction;
+
+  /// Title for screen time by app chart
+  ///
+  /// In zh, this message translates to:
+  /// **'近期按应用的屏幕使用时长'**
+  String get analyticsScreenAppsTitle;
+
+  /// Description for screen time by app chart
+  ///
+  /// In zh, this message translates to:
+  /// **'堆叠柱状图展示你最近每天的屏幕时间分别花在了哪些应用上。'**
+  String get analyticsScreenAppsDesc;
+
+  /// Title for daily screen total chart
+  ///
+  /// In zh, this message translates to:
+  /// **'近期每日屏幕总时长'**
+  String get analyticsScreenTotalsTitle;
+
+  /// Description for daily screen total chart
+  ///
+  /// In zh, this message translates to:
+  /// **'柱状图展示你最近每个日期的总屏幕使用时长。'**
+  String get analyticsScreenTotalsDesc;
+
+  /// Title for work versus screen comparison chart
+  ///
+  /// In zh, this message translates to:
+  /// **'工作时长 vs 屏幕时长'**
+  String get analyticsWorkVsScreenTitle;
+
+  /// Description for work versus screen comparison chart
+  ///
+  /// In zh, this message translates to:
+  /// **'分组柱状图对比你每天记录的任务工作时长与总屏幕使用时长。'**
+  String get analyticsWorkVsScreenDesc;
+
+  /// Fallback text when screen usage data is unavailable
+  ///
+  /// In zh, this message translates to:
+  /// **'尚未授予 Android 使用情况访问权限，暂时无法显示屏幕使用数据。'**
+  String get analyticsScreenUnavailable;
 }
 
 class _AppLocalizationsDelegate

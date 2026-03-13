@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">老母亲</string>
+  <string name="screen_usage_notification_channel_name">屏幕使用情况采集</string>
+  <string name="screen_usage_notification_channel_desc">每日采集并保存屏幕使用统计</string>
+  <string name="screen_usage_notification_title">正在保存屏幕使用统计</string>
+  <string name="screen_usage_notification_text">老母亲正在整理今日的应用使用情况。</string>
 </resources>

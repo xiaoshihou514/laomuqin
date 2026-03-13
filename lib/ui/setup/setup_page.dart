@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../main/main_page.dart';
-import '../settings/asr_settings_page.dart';
-import '../settings/settings_viewmodel.dart';
 import 'setup_viewmodel.dart';
 
 class SetupPage extends StatefulWidget {
@@ -17,21 +14,35 @@ class SetupPage extends StatefulWidget {
   State<SetupPage> createState() => _SetupPageState();
 }
 
-class _SetupPageState extends State<SetupPage> {
+class _SetupPageState extends State<SetupPage> with WidgetsBindingObserver {
   late final PageController _pageController;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _pageController = PageController();
     widget.viewModel.addListener(_onViewModelChange);
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _pageController.dispose();
     widget.viewModel.removeListener(_onViewModelChange);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        widget.viewModel.currentStep == SetupStep.usageAccess) {
+      widget.viewModel.checkUsageAccess.execute().then((_) {
+        if (mounted && widget.viewModel.usageAccessGranted) {
+          _finishAndNavigate();
+        }
+      });
+    }
   }
 
   void _onViewModelChange() {
@@ -45,24 +56,20 @@ class _SetupPageState extends State<SetupPage> {
     }
   }
 
-  Future<void> _finishAndNavigate(bool asrEnabled) async {
-    await widget.viewModel.finishSetup.execute(asrEnabled);
+  Future<void> _finishAndNavigate() async {
+    await widget.viewModel.finishSetup.execute();
     if (!mounted) return;
-
-    if (asrEnabled) {
-      // Let the user configure the ASR model before entering the main app.
-      final settingsVm = context.read<SettingsViewModel>();
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (_) => AsrSettingsPage(viewModel: settingsVm),
-        ),
-      );
-      if (!mounted) return;
-    }
-
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => const MainPage()),
     );
+  }
+
+  Future<void> _requestBackgroundAndProceed() async {
+    await widget.viewModel.requestBackground.execute();
+  }
+
+  Future<void> _openUsageAccess() async {
+    await widget.viewModel.openUsageAccess.execute();
   }
 
   @override
@@ -86,8 +93,14 @@ class _SetupPageState extends State<SetupPage> {
                     children: [
                       _WelcomeStep(viewModel: widget.viewModel),
                       _NotificationStep(viewModel: widget.viewModel),
-                      _BackgroundStep(viewModel: widget.viewModel),
-                      _AsrStep(onFinish: _finishAndNavigate),
+                      _BackgroundStep(
+                        onGrant: _requestBackgroundAndProceed,
+                        onSkip: () => widget.viewModel.nextStep.execute(),
+                      ),
+                      _UsageAccessStep(
+                        onGrant: _openUsageAccess,
+                        onSkip: _finishAndNavigate,
+                      ),
                     ],
                   ),
                 ),
@@ -177,9 +190,10 @@ class _NotificationStep extends StatelessWidget {
 }
 
 class _BackgroundStep extends StatelessWidget {
-  const _BackgroundStep({required this.viewModel});
+  const _BackgroundStep({required this.onGrant, required this.onSkip});
 
-  final SetupViewModel viewModel;
+  final Future<void> Function() onGrant;
+  final Future<void> Function() onSkip;
 
   @override
   Widget build(BuildContext context) {
@@ -194,32 +208,33 @@ class _BackgroundStep extends StatelessWidget {
       description: l10n.setupBackgroundDesc,
       primaryLabel: l10n.setupBackgroundGrant,
       secondaryLabel: l10n.setupSkip,
-      onPrimary: () => viewModel.requestBackground.execute(),
-      onSecondary: () => viewModel.nextStep.execute(),
+      onPrimary: () => onGrant(),
+      onSecondary: () => onSkip(),
     );
   }
 }
 
-class _AsrStep extends StatelessWidget {
-  const _AsrStep({required this.onFinish});
+class _UsageAccessStep extends StatelessWidget {
+  const _UsageAccessStep({required this.onGrant, required this.onSkip});
 
-  final Future<void> Function(bool) onFinish;
+  final Future<void> Function() onGrant;
+  final Future<void> Function() onSkip;
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return _StepScaffold(
       iconWidget: Icon(
-        TDIcons.microphone,
+        Icons.insights_outlined,
         size: 80,
         color: Theme.of(context).colorScheme.primary,
       ),
-      title: l10n.setupAsrTitle,
-      description: l10n.setupAsrDesc,
-      primaryLabel: l10n.setupAsrEnable,
-      secondaryLabel: l10n.setupAsrSkip,
-      onPrimary: () => onFinish(true),
-      onSecondary: () => onFinish(false),
+      title: l10n.setupUsageAccessTitle,
+      description: l10n.setupUsageAccessDesc,
+      primaryLabel: l10n.setupUsageAccessGrant,
+      secondaryLabel: l10n.setupSkip,
+      onPrimary: () => onGrant(),
+      onSecondary: () => onSkip(),
     );
   }
 }

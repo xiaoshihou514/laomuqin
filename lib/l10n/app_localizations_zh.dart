@@ -338,4 +338,45 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get mainNoAlarm => '不设置提醒';
+
+  @override
+  String get setupUsageAccessTitle => '屏幕使用情况权限';
+
+  @override
+  String get setupUsageAccessDesc => '允许老母亲读取 Android 的屏幕使用统计，以便生成每日工作与应用使用图表。';
+
+  @override
+  String get setupUsageAccessGrant => '打开使用情况访问设置';
+
+  @override
+  String get analyticsUsagePermissionTitle => '开启屏幕使用情况访问';
+
+  @override
+  String get analyticsUsagePermissionDesc =>
+      '授予 Android 使用情况访问权限后，统计页将显示按应用和总量汇总的屏幕使用图表。';
+
+  @override
+  String get analyticsUsagePermissionAction => '打开系统设置';
+
+  @override
+  String get analyticsScreenAppsTitle => '近期按应用的屏幕使用时长';
+
+  @override
+  String get analyticsScreenAppsDesc => '堆叠柱状图展示你最近每天的屏幕时间分别花在了哪些应用上。';
+
+  @override
+  String get analyticsScreenTotalsTitle => '近期每日屏幕总时长';
+
+  @override
+  String get analyticsScreenTotalsDesc => '柱状图展示你最近每个日期的总屏幕使用时长。';
+
+  @override
+  String get analyticsWorkVsScreenTitle => '工作时长 vs 屏幕时长';
+
+  @override
+  String get analyticsWorkVsScreenDesc => '分组柱状图对比你每天记录的任务工作时长与总屏幕使用时长。';
+
+  @override
+  String get analyticsScreenUnavailable =>
+      '尚未授予 Android 使用情况访问权限，暂时无法显示屏幕使用数据。';
 }

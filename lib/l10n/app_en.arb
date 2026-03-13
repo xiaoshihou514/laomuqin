@@ -1,30 +1,22 @@
 {
   "@@locale": "en",
-
   "appTitle": "LaoMuQin",
-
   "setupWelcomeTitle": "Welcome to LaoMuQin",
   "setupWelcomeSubtitle": "Your personal task assistant",
   "setupWelcomeButton": "Get Started",
-
   "setupNotificationTitle": "Notifications",
   "setupNotificationDesc": "LaoMuQin needs notification permission to remind you before tasks are due.",
   "setupNotificationGrant": "Grant Notification Permission",
-
   "setupBackgroundTitle": "Background Access",
   "setupBackgroundDesc": "Allow LaoMuQin to run in the background to continuously track your tasks.",
   "setupBackgroundGrant": "Grant Background Permission",
-
   "setupAsrTitle": "Voice Input",
   "setupAsrDesc": "Would you like to enable voice input? You can change this anytime in Settings.",
   "setupAsrEnable": "Enable Voice Input",
   "setupAsrSkip": "Not Now",
-
   "setupSkip": "Skip",
   "setupFinish": "Done",
-
   "setupStepOf": "{current}/{total}",
-
   "mainGreeting": "How can I help you?",
   "mainInputHint": "Enter a task…",
   "mainAskTasksChip": "What to do today?",
@@ -36,7 +28,6 @@
   "mainStartTaskPrompt": "Starting: {title}",
   "mainAskTasksResponse": "(Task suggestions coming soon)",
   "mainMicUnavailable": "Voice input coming soon",
-
   "mainAskTasksBtn": "What to do today?",
   "mainStartTimerBtn": "Start Task Timer",
   "mainStartTimerTitle": "Start Timer",
@@ -49,10 +40,11 @@
   "mainStartTimerDeadline": "Due {deadline}",
   "@mainStartTimerDeadline": {
     "placeholders": {
-      "deadline": {"type": "String"}
+      "deadline": {
+        "type": "String"
+      }
     }
   },
-
   "asrModelNotConfigured": "Please configure an ASR model in Settings first",
   "asrRecordTitle": "Voice Input",
   "asrRecordHold": "Hold to speak",
@@ -62,7 +54,6 @@
   "asrRecordProcessing": "Recognizing…",
   "asrRecordLoading": "Loading model…",
   "asrRecordMicError": "Microphone Error",
-
   "asrSettingsTitle": "ASR Model Settings",
   "asrSettingsModelType": "Model Type",
   "asrSettingsEncoder": "Encoder Model File",
@@ -78,22 +69,18 @@
   "asrSettingsSelectPreset": "Select Model Preset",
   "asrSettingsModelFiles": "Model Files",
   "asrSetupSkip": "Skip (configure later)",
-  "asrSettingsDownloadHint": "Download model files from the sherpa-onnx releases page",
-
+  "asrSettingsDownloadHint": "First use requires downloading model files (~100–400 MB). Please stay connected.",
   "settingsAsrModel": "ASR Model Settings",
   "settingsAsrModelDesc": "Configure offline speech recognition model",
-
   "timerElapsed": "Elapsed {time}",
   "timerPause": "Pause",
   "timerResume": "Resume",
   "timerStop": "Stop",
   "timerStopped": "Task ended",
-
   "settingsTitle": "Settings",
   "settingsAsr": "Voice Input",
   "settingsAsrDesc": "Use microphone for voice input",
   "settingsTheme": "Theme",
-
   "settingsThemeSystem": "System",
   "settingsThemeLight": "Light",
   "settingsThemeDark": "Dark",
@@ -104,7 +91,9 @@
   "settingsExportTasksSuccess": "Tasks exported to {path}",
   "@settingsExportTasksSuccess": {
     "placeholders": {
-      "path": {"type": "String"}
+      "path": {
+        "type": "String"
+      }
     }
   },
   "settingsExportTasksFailed": "Failed to export tasks",
@@ -117,10 +106,8 @@
   "analyticsHourlyDesc": "Bars show how much tracked time started in each hour of the day.",
   "analyticsDailyTotalsTitle": "Recent daily totals",
   "analyticsDailyTotalsDesc": "Bars show your total tracked work time for each recent date.",
-
   "asrRecordLive": "Recognising…",
   "asrRecordEmpty": "Speech not recognised, please try again",
-
   "downloadTitle": "Downloading Models",
   "downloadDismiss": "Done",
   "downloadExtracting": "Extracting…",
@@ -128,25 +115,46 @@
   "downloadPerc": "{filename} {percent}%",
   "@downloadPerc": {
     "placeholders": {
-      "filename": {"type": "String"},
-      "percent": {"type": "double", "format": "decimalPattern"}
+      "filename": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "double",
+        "format": "decimalPattern"
+      }
     }
   },
-
   "asrSaveAndDownload": "Save & Download Model",
-  "asrSettingsDownloadHint": "First use requires downloading model files (~100–400 MB). Please stay connected.",
-
   "alarmScheduled": "Reminder set for \"{title}\" at {time}",
   "@alarmScheduled": {
     "placeholders": {
-      "title": {"type": "String"},
-      "time": {"type": "String"}
+      "title": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
-
   "mainSetAlarm": "Set Reminder",
-  "@mainSetAlarm": {"description": "Button: schedule an alarm for this task deadline"},
-
+  "@mainSetAlarm": {
+    "description": "Button: schedule an alarm for this task deadline"
+  },
   "mainNoAlarm": "No Reminder",
-  "@mainNoAlarm": {"description": "Button: skip alarm, just save deadline"}
+  "@mainNoAlarm": {
+    "description": "Button: skip alarm, just save deadline"
+  },
+  "setupUsageAccessTitle": "Screen Usage Access",
+  "setupUsageAccessDesc": "Allow LaoMuQin to read Android screen-usage statistics so it can build daily work and app-usage charts.",
+  "setupUsageAccessGrant": "Open Usage Access Settings",
+  "analyticsUsagePermissionTitle": "Allow screen-usage access",
+  "analyticsUsagePermissionDesc": "Grant Android usage access to add app-level and aggregate screen-time charts to your statistics.",
+  "analyticsUsagePermissionAction": "Open system settings",
+  "analyticsScreenAppsTitle": "Recent screen time by app",
+  "analyticsScreenAppsDesc": "Stacked bars show which apps took your screen time each recent day.",
+  "analyticsScreenTotalsTitle": "Recent daily screen totals",
+  "analyticsScreenTotalsDesc": "Bars show your total screen time for each recent date.",
+  "analyticsWorkVsScreenTitle": "Work time vs screen time",
+  "analyticsWorkVsScreenDesc": "Grouped bars compare your tracked task time with total screen time by day.",
+  "analyticsScreenUnavailable": "Screen-usage data is unavailable until Android usage access is granted."
 }

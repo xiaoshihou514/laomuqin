@@ -349,4 +349,49 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mainNoAlarm => 'No Reminder';
+
+  @override
+  String get setupUsageAccessTitle => 'Screen Usage Access';
+
+  @override
+  String get setupUsageAccessDesc =>
+      'Allow LaoMuQin to read Android screen-usage statistics so it can build daily work and app-usage charts.';
+
+  @override
+  String get setupUsageAccessGrant => 'Open Usage Access Settings';
+
+  @override
+  String get analyticsUsagePermissionTitle => 'Allow screen-usage access';
+
+  @override
+  String get analyticsUsagePermissionDesc =>
+      'Grant Android usage access to add app-level and aggregate screen-time charts to your statistics.';
+
+  @override
+  String get analyticsUsagePermissionAction => 'Open system settings';
+
+  @override
+  String get analyticsScreenAppsTitle => 'Recent screen time by app';
+
+  @override
+  String get analyticsScreenAppsDesc =>
+      'Stacked bars show which apps took your screen time each recent day.';
+
+  @override
+  String get analyticsScreenTotalsTitle => 'Recent daily screen totals';
+
+  @override
+  String get analyticsScreenTotalsDesc =>
+      'Bars show your total screen time for each recent date.';
+
+  @override
+  String get analyticsWorkVsScreenTitle => 'Work time vs screen time';
+
+  @override
+  String get analyticsWorkVsScreenDesc =>
+      'Grouped bars compare your tracked task time with total screen time by day.';
+
+  @override
+  String get analyticsScreenUnavailable =>
+      'Screen-usage data is unavailable until Android usage access is granted.';
 }

@@ -1,363 +1,525 @@
 {
   "@@locale": "zh",
-
   "appTitle": "老母亲",
-  "@appTitle": {"description": "Application title"},
-
+  "@appTitle": {
+    "description": "Application title"
+  },
   "setupWelcomeTitle": "欢迎使用老母亲",
-  "@setupWelcomeTitle": {"description": "Setup welcome title"},
-
+  "@setupWelcomeTitle": {
+    "description": "Setup welcome title"
+  },
   "setupWelcomeSubtitle": "你的任务管理助手",
-  "@setupWelcomeSubtitle": {"description": "Setup welcome subtitle"},
-
+  "@setupWelcomeSubtitle": {
+    "description": "Setup welcome subtitle"
+  },
   "setupWelcomeButton": "开始设置",
-  "@setupWelcomeButton": {"description": "Button to start setup"},
-
+  "@setupWelcomeButton": {
+    "description": "Button to start setup"
+  },
   "setupNotificationTitle": "通知权限",
-  "@setupNotificationTitle": {"description": "Setup step: notification permission title"},
-
+  "@setupNotificationTitle": {
+    "description": "Setup step: notification permission title"
+  },
   "setupNotificationDesc": "老母亲需要通知权限，以便在任务截止前提醒你。",
-  "@setupNotificationDesc": {"description": "Setup step: notification permission description"},
-
+  "@setupNotificationDesc": {
+    "description": "Setup step: notification permission description"
+  },
   "setupNotificationGrant": "授予通知权限",
-  "@setupNotificationGrant": {"description": "Grant notification permission button"},
-
+  "@setupNotificationGrant": {
+    "description": "Grant notification permission button"
+  },
   "setupBackgroundTitle": "后台运行",
-  "@setupBackgroundTitle": {"description": "Setup step: background permission title"},
-
+  "@setupBackgroundTitle": {
+    "description": "Setup step: background permission title"
+  },
   "setupBackgroundDesc": "允许老母亲在后台运行，以便持续追踪你的任务进度。",
-  "@setupBackgroundDesc": {"description": "Setup step: background permission description"},
-
+  "@setupBackgroundDesc": {
+    "description": "Setup step: background permission description"
+  },
   "setupBackgroundGrant": "授予后台权限",
-  "@setupBackgroundGrant": {"description": "Grant background permission button"},
-
+  "@setupBackgroundGrant": {
+    "description": "Grant background permission button"
+  },
   "setupAsrTitle": "语音输入",
-  "@setupAsrTitle": {"description": "Setup step: ASR preference title"},
-
+  "@setupAsrTitle": {
+    "description": "Setup step: ASR preference title"
+  },
   "setupAsrDesc": "是否启用语音输入功能？你可以随时在设置中更改。",
-  "@setupAsrDesc": {"description": "Setup step: ASR preference description"},
-
+  "@setupAsrDesc": {
+    "description": "Setup step: ASR preference description"
+  },
   "setupAsrEnable": "启用语音输入",
-  "@setupAsrEnable": {"description": "Enable ASR button"},
-
+  "@setupAsrEnable": {
+    "description": "Enable ASR button"
+  },
   "setupAsrSkip": "暂不启用",
-  "@setupAsrSkip": {"description": "Skip ASR button"},
-
+  "@setupAsrSkip": {
+    "description": "Skip ASR button"
+  },
   "setupSkip": "跳过",
-  "@setupSkip": {"description": "Skip current setup step"},
-
+  "@setupSkip": {
+    "description": "Skip current setup step"
+  },
   "setupFinish": "完成",
-  "@setupFinish": {"description": "Finish setup button"},
-
+  "@setupFinish": {
+    "description": "Finish setup button"
+  },
   "setupStepOf": "{current}/{total}",
   "@setupStepOf": {
     "description": "Step indicator e.g. 2/4",
     "placeholders": {
-      "current": {"type": "int"},
-      "total": {"type": "int"}
+      "current": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
-
   "mainGreeting": "有什么我可以帮你的？",
-  "@mainGreeting": {"description": "Initial system greeting in chat"},
-
+  "@mainGreeting": {
+    "description": "Initial system greeting in chat"
+  },
   "mainInputHint": "输入一个任务…",
-  "@mainInputHint": {"description": "Chat input placeholder text"},
-
+  "@mainInputHint": {
+    "description": "Chat input placeholder text"
+  },
   "mainAskTasksChip": "今天做什么？",
-  "@mainAskTasksChip": {"description": "Quick-action chip to ask for task suggestions"},
-
+  "@mainAskTasksChip": {
+    "description": "Quick-action chip to ask for task suggestions"
+  },
   "mainSetDeadline": "需要设定截止时间吗？",
-  "@mainSetDeadline": {"description": "System message asking about task deadline"},
-
+  "@mainSetDeadline": {
+    "description": "System message asking about task deadline"
+  },
   "mainDeadlineButton": "设置时间",
-  "@mainDeadlineButton": {"description": "Button to open deadline picker"},
-
+  "@mainDeadlineButton": {
+    "description": "Button to open deadline picker"
+  },
   "mainDeadlineSkip": "跳过",
-  "@mainDeadlineSkip": {"description": "Skip setting deadline"},
-
+  "@mainDeadlineSkip": {
+    "description": "Skip setting deadline"
+  },
   "mainTaskConfirmed": "任务已添加：{title}",
   "@mainTaskConfirmed": {
     "description": "System confirmation after task added",
     "placeholders": {
-      "title": {"type": "String"}
+      "title": {
+        "type": "String"
+      }
     }
   },
-
   "mainTaskWithDeadline": "任务已添加：{title}，截止时间：{deadline}",
   "@mainTaskWithDeadline": {
     "description": "System confirmation after task added with deadline",
     "placeholders": {
-      "title": {"type": "String"},
-      "deadline": {"type": "String"}
+      "title": {
+        "type": "String"
+      },
+      "deadline": {
+        "type": "String"
+      }
     }
   },
-
   "mainStartTaskPrompt": "开始执行：{title}",
   "@mainStartTaskPrompt": {
     "description": "Message shown when user starts a task",
     "placeholders": {
-      "title": {"type": "String"}
+      "title": {
+        "type": "String"
+      }
     }
   },
-
   "mainAskTasksResponse": "（任务建议功能即将推出）",
-  "@mainAskTasksResponse": {"description": "Placeholder response for ask-tasks feature"},
-
+  "@mainAskTasksResponse": {
+    "description": "Placeholder response for ask-tasks feature"
+  },
   "mainMicUnavailable": "语音输入功能即将推出",
-  "@mainMicUnavailable": {"description": "Snackbar when mic button tapped but ASR not available"},
-
+  "@mainMicUnavailable": {
+    "description": "Snackbar when mic button tapped but ASR not available"
+  },
   "mainAskTasksBtn": "今天做什么？",
-  "@mainAskTasksBtn": {"description": "Big button to ask for task suggestions"},
-
+  "@mainAskTasksBtn": {
+    "description": "Big button to ask for task suggestions"
+  },
   "mainStartTimerBtn": "开始任务计时",
-  "@mainStartTimerBtn": {"description": "Big button to start a task timer"},
-
+  "@mainStartTimerBtn": {
+    "description": "Big button to start a task timer"
+  },
   "mainStartTimerTitle": "开始计时",
-  "@mainStartTimerTitle": {"description": "Dialog title for starting a task timer"},
-
+  "@mainStartTimerTitle": {
+    "description": "Dialog title for starting a task timer"
+  },
   "mainStartTimerHint": "输入任务名称",
-  "@mainStartTimerHint": {"description": "Hint for task name in start timer dialog"},
-
+  "@mainStartTimerHint": {
+    "description": "Hint for task name in start timer dialog"
+  },
   "mainStartTimerConfirm": "开始",
-  "@mainStartTimerConfirm": {"description": "Confirm starting the timer"},
-
+  "@mainStartTimerConfirm": {
+    "description": "Confirm starting the timer"
+  },
   "mainStartTimerCancel": "取消",
-  "@mainStartTimerCancel": {"description": "Cancel starting the timer"},
-
+  "@mainStartTimerCancel": {
+    "description": "Cancel starting the timer"
+  },
   "mainStartTimerPickTask": "选择要计时的任务",
-  "@mainStartTimerPickTask": {"description": "Bottom sheet title for choosing a task to time"},
-
+  "@mainStartTimerPickTask": {
+    "description": "Bottom sheet title for choosing a task to time"
+  },
   "mainStartTimerNoTasks": "当前没有可计时的待办任务",
-  "@mainStartTimerNoTasks": {"description": "Snackbar when timer is requested but there are no pending tasks"},
-
+  "@mainStartTimerNoTasks": {
+    "description": "Snackbar when timer is requested but there are no pending tasks"
+  },
   "mainStartTimerNoDeadline": "无截止时间",
-  "@mainStartTimerNoDeadline": {"description": "Subtitle for a task without deadline in timer picker"},
-
+  "@mainStartTimerNoDeadline": {
+    "description": "Subtitle for a task without deadline in timer picker"
+  },
   "mainStartTimerDeadline": "截止时间：{deadline}",
   "@mainStartTimerDeadline": {
     "description": "Subtitle for a task with deadline in timer picker",
     "placeholders": {
-      "deadline": {"type": "String"}
+      "deadline": {
+        "type": "String"
+      }
     }
   },
-
   "asrModelNotConfigured": "请先在设置中配置ASR模型",
-  "@asrModelNotConfigured": {"description": "Snackbar when mic tapped but model not configured"},
-
+  "@asrModelNotConfigured": {
+    "description": "Snackbar when mic tapped but model not configured"
+  },
   "asrRecordTitle": "语音输入",
-  "@asrRecordTitle": {"description": "Title of the ASR recording bottom sheet"},
-
+  "@asrRecordTitle": {
+    "description": "Title of the ASR recording bottom sheet"
+  },
   "asrRecordHold": "按住说话",
-  "@asrRecordHold": {"description": "Hint shown on mic button before user starts recording"},
-
+  "@asrRecordHold": {
+    "description": "Hint shown on mic button before user starts recording"
+  },
   "asrRecordStop": "完成",
-  "@asrRecordStop": {"description": "Stop recording and transcribe button"},
-
+  "@asrRecordStop": {
+    "description": "Stop recording and transcribe button"
+  },
   "asrRecordCancel": "取消",
-  "@asrRecordCancel": {"description": "Cancel recording button"},
+  "@asrRecordCancel": {
+    "description": "Cancel recording button"
+  },
   "asrRecordBtn": "语音输入",
-  "@asrRecordBtn": {"description": "Big button label for starting ASR voice input"},
-
+  "@asrRecordBtn": {
+    "description": "Big button label for starting ASR voice input"
+  },
   "asrRecordProcessing": "正在识别…",
-  "@asrRecordProcessing": {"description": "Processing indicator during ASR transcription"},
-
+  "@asrRecordProcessing": {
+    "description": "Processing indicator during ASR transcription"
+  },
   "asrRecordLoading": "正在加载模型…",
-  "@asrRecordLoading": {"description": "Loading indicator while ASR model is initializing"},
-
+  "@asrRecordLoading": {
+    "description": "Loading indicator while ASR model is initializing"
+  },
   "asrRecordMicError": "麦克风错误",
-  "@asrRecordMicError": {"description": "Error title when microphone fails to open"},
-
+  "@asrRecordMicError": {
+    "description": "Error title when microphone fails to open"
+  },
   "asrSettingsTitle": "ASR 模型配置",
-  "@asrSettingsTitle": {"description": "ASR settings page title"},
-
+  "@asrSettingsTitle": {
+    "description": "ASR settings page title"
+  },
   "asrSettingsModelType": "模型类型",
-  "@asrSettingsModelType": {"description": "Label for model type dropdown"},
-
+  "@asrSettingsModelType": {
+    "description": "Label for model type dropdown"
+  },
   "asrSettingsEncoder": "Encoder 模型文件",
-  "@asrSettingsEncoder": {"description": "Label for encoder file picker"},
-
+  "@asrSettingsEncoder": {
+    "description": "Label for encoder file picker"
+  },
   "asrSettingsDecoder": "Decoder 模型文件",
-  "@asrSettingsDecoder": {"description": "Label for decoder file picker"},
-
+  "@asrSettingsDecoder": {
+    "description": "Label for decoder file picker"
+  },
   "asrSettingsJoiner": "Joiner 模型文件",
-  "@asrSettingsJoiner": {"description": "Label for joiner file picker"},
-
+  "@asrSettingsJoiner": {
+    "description": "Label for joiner file picker"
+  },
   "asrSettingsSingle": "模型文件",
-  "@asrSettingsSingle": {"description": "Label for single model file picker (CTC)"},
-
+  "@asrSettingsSingle": {
+    "description": "Label for single model file picker (CTC)"
+  },
   "asrSettingsTokens": "词表文件 (tokens.txt)",
-  "@asrSettingsTokens": {"description": "Label for tokens file picker"},
-
+  "@asrSettingsTokens": {
+    "description": "Label for tokens file picker"
+  },
   "asrSettingsSave": "保存配置",
-  "@asrSettingsSave": {"description": "Save ASR settings button"},
-
+  "@asrSettingsSave": {
+    "description": "Save ASR settings button"
+  },
   "asrSettingsReset": "重置",
-  "@asrSettingsReset": {"description": "Reset ASR settings button"},
-
+  "@asrSettingsReset": {
+    "description": "Reset ASR settings button"
+  },
   "asrSettingsSaved": "配置已保存",
-  "@asrSettingsSaved": {"description": "Snackbar when ASR settings saved successfully"},
-
+  "@asrSettingsSaved": {
+    "description": "Snackbar when ASR settings saved successfully"
+  },
   "asrSettingsMissingFields": "请填写所有必填字段",
-  "@asrSettingsMissingFields": {"description": "Validation error for missing required fields"},
-
+  "@asrSettingsMissingFields": {
+    "description": "Validation error for missing required fields"
+  },
   "asrSettingsPickFile": "选择文件",
-  "@asrSettingsPickFile": {"description": "File picker button label"},
-
+  "@asrSettingsPickFile": {
+    "description": "File picker button label"
+  },
   "asrSettingsSelectPreset": "选择预设模型",
-  "@asrSettingsSelectPreset": {"description": "Preset selection section title in ASR settings"},
-
+  "@asrSettingsSelectPreset": {
+    "description": "Preset selection section title in ASR settings"
+  },
   "asrSettingsModelFiles": "模型文件",
-  "@asrSettingsModelFiles": {"description": "Model files section title in ASR settings"},
-
+  "@asrSettingsModelFiles": {
+    "description": "Model files section title in ASR settings"
+  },
   "asrSetupSkip": "跳过（稍后配置）",
-  "@asrSetupSkip": {"description": "Skip ASR model setup during onboarding"},
-
-  "asrSettingsDownloadHint": "请从 sherpa-onnx 下载所需模型文件",
-  "@asrSettingsDownloadHint": {"description": "Hint about downloading model files"},
-
+  "@asrSetupSkip": {
+    "description": "Skip ASR model setup during onboarding"
+  },
+  "asrSettingsDownloadHint": "首次使用需要下载模型文件（约 100–400 MB），请保持网络连接。",
+  "@asrSettingsDownloadHint": {
+    "description": "Hint about downloading model files"
+  },
   "settingsAsrModel": "ASR 模型配置",
-  "@settingsAsrModel": {"description": "Settings cell: navigate to ASR model configuration"},
-
+  "@settingsAsrModel": {
+    "description": "Settings cell: navigate to ASR model configuration"
+  },
   "settingsAsrModelDesc": "配置离线语音识别模型",
-  "@settingsAsrModelDesc": {"description": "Settings cell description for ASR model"},
-
+  "@settingsAsrModelDesc": {
+    "description": "Settings cell description for ASR model"
+  },
   "timerElapsed": "已用时 {time}",
   "@timerElapsed": {
     "description": "Elapsed time label",
     "placeholders": {
-      "time": {"type": "String"}
+      "time": {
+        "type": "String"
+      }
     }
   },
-
   "timerPause": "暂停",
-  "@timerPause": {"description": "Timer pause button"},
-
+  "@timerPause": {
+    "description": "Timer pause button"
+  },
   "timerResume": "继续",
-  "@timerResume": {"description": "Timer resume button"},
-
+  "@timerResume": {
+    "description": "Timer resume button"
+  },
   "timerStop": "结束",
-  "@timerStop": {"description": "Timer stop button"},
-
+  "@timerStop": {
+    "description": "Timer stop button"
+  },
   "timerStopped": "任务已结束",
-  "@timerStopped": {"description": "Message shown when timer is stopped"},
-
+  "@timerStopped": {
+    "description": "Message shown when timer is stopped"
+  },
   "settingsTitle": "设置",
-  "@settingsTitle": {"description": "Settings page title"},
-
+  "@settingsTitle": {
+    "description": "Settings page title"
+  },
   "settingsAsr": "语音输入",
-  "@settingsAsr": {"description": "Settings: ASR toggle label"},
-
+  "@settingsAsr": {
+    "description": "Settings: ASR toggle label"
+  },
   "settingsAsrDesc": "使用麦克风进行语音输入",
-  "@settingsAsrDesc": {"description": "Settings: ASR toggle description"},
-
+  "@settingsAsrDesc": {
+    "description": "Settings: ASR toggle description"
+  },
   "settingsTheme": "主题",
-  "@settingsTheme": {"description": "Settings: theme label"},
-
+  "@settingsTheme": {
+    "description": "Settings: theme label"
+  },
   "settingsThemeSystem": "跟随系统",
-  "@settingsThemeSystem": {"description": "Settings: theme option - system"},
-
+  "@settingsThemeSystem": {
+    "description": "Settings: theme option - system"
+  },
   "settingsThemeLight": "浅色",
-  "@settingsThemeLight": {"description": "Settings: theme option - light"},
-
+  "@settingsThemeLight": {
+    "description": "Settings: theme option - light"
+  },
   "settingsThemeDark": "深色",
-  "@settingsThemeDark": {"description": "Settings: theme option - dark"},
-
+  "@settingsThemeDark": {
+    "description": "Settings: theme option - dark"
+  },
   "settingsAnalytics": "工作统计",
-  "@settingsAnalytics": {"description": "Settings entry for timer analytics page"},
-
+  "@settingsAnalytics": {
+    "description": "Settings entry for timer analytics page"
+  },
   "settingsAnalyticsDesc": "查看基于计时记录的近期工作图表",
-  "@settingsAnalyticsDesc": {"description": "Settings entry description for analytics"},
-
+  "@settingsAnalyticsDesc": {
+    "description": "Settings entry description for analytics"
+  },
   "settingsExportTasks": "导出任务",
-  "@settingsExportTasks": {"description": "Settings action to export tasks to JSON"},
-
+  "@settingsExportTasks": {
+    "description": "Settings action to export tasks to JSON"
+  },
   "settingsExportTasksDesc": "将当前任务列表导出为 Downloads 中的 JSON 文件",
-  "@settingsExportTasksDesc": {"description": "Description for export tasks action"},
-
+  "@settingsExportTasksDesc": {
+    "description": "Description for export tasks action"
+  },
   "settingsExportTasksSuccess": "任务已导出到：{path}",
   "@settingsExportTasksSuccess": {
     "description": "Snackbar after exporting tasks successfully",
     "placeholders": {
-      "path": {"type": "String"}
+      "path": {
+        "type": "String"
+      }
     }
   },
-
   "settingsExportTasksFailed": "导出任务失败",
-  "@settingsExportTasksFailed": {"description": "Snackbar after export task failure"},
-
+  "@settingsExportTasksFailed": {
+    "description": "Snackbar after export task failure"
+  },
   "analyticsTitle": "工作统计",
-  "@analyticsTitle": {"description": "Analytics page title"},
-
+  "@analyticsTitle": {
+    "description": "Analytics page title"
+  },
   "analyticsEmptyTitle": "还没有计时数据",
-  "@analyticsEmptyTitle": {"description": "Empty state title for analytics page"},
-
+  "@analyticsEmptyTitle": {
+    "description": "Empty state title for analytics page"
+  },
   "analyticsEmptyDesc": "先开始并结束几次任务计时，再回来查看你的工作规律。",
-  "@analyticsEmptyDesc": {"description": "Empty state description for analytics page"},
-
+  "@analyticsEmptyDesc": {
+    "description": "Empty state description for analytics page"
+  },
   "analyticsRecentByTaskTitle": "近期每日工作",
-  "@analyticsRecentByTaskTitle": {"description": "Title for recent daily stacked work chart"},
-
+  "@analyticsRecentByTaskTitle": {
+    "description": "Title for recent daily stacked work chart"
+  },
   "analyticsRecentByTaskDesc": "堆叠柱状图展示你最近每天工作了多久，以及分别花在了哪些任务上。",
-  "@analyticsRecentByTaskDesc": {"description": "Description for recent daily stacked work chart"},
-
+  "@analyticsRecentByTaskDesc": {
+    "description": "Description for recent daily stacked work chart"
+  },
   "analyticsHourlyTitle": "常用工作时段",
-  "@analyticsHourlyTitle": {"description": "Title for hourly work habit chart"},
-
+  "@analyticsHourlyTitle": {
+    "description": "Title for hourly work habit chart"
+  },
   "analyticsHourlyDesc": "柱状图展示你通常会在一天中的哪个小时开始投入工作。",
-  "@analyticsHourlyDesc": {"description": "Description for hourly work habit chart"},
-
+  "@analyticsHourlyDesc": {
+    "description": "Description for hourly work habit chart"
+  },
   "analyticsDailyTotalsTitle": "近期每日总量",
-  "@analyticsDailyTotalsTitle": {"description": "Title for recent daily total chart"},
-
+  "@analyticsDailyTotalsTitle": {
+    "description": "Title for recent daily total chart"
+  },
   "analyticsDailyTotalsDesc": "柱状图展示你最近每个日期的总工作时长。",
-  "@analyticsDailyTotalsDesc": {"description": "Description for recent daily total chart"},
-
+  "@analyticsDailyTotalsDesc": {
+    "description": "Description for recent daily total chart"
+  },
   "asrRecordLive": "识别中…",
-  "@asrRecordLive": {"description": "Live ASR partial result label"},
-
+  "@asrRecordLive": {
+    "description": "Live ASR partial result label"
+  },
   "asrRecordEmpty": "未识别到语音，请重试",
-  "@asrRecordEmpty": {"description": "Snackbar when ASR returns empty"},
-
+  "@asrRecordEmpty": {
+    "description": "Snackbar when ASR returns empty"
+  },
   "downloadTitle": "下载模型",
-  "@downloadTitle": {"description": "Model download dialog title"},
-
+  "@downloadTitle": {
+    "description": "Model download dialog title"
+  },
   "downloadDismiss": "完成",
-  "@downloadDismiss": {"description": "Button to dismiss download dialog when done"},
-
+  "@downloadDismiss": {
+    "description": "Button to dismiss download dialog when done"
+  },
   "downloadExtracting": "正在解压…",
-  "@downloadExtracting": {"description": "Download stage: extracting"},
-
+  "@downloadExtracting": {
+    "description": "Download stage: extracting"
+  },
   "downloadDone": "✓ 完成",
-  "@downloadDone": {"description": "Download stage: done"},
-
+  "@downloadDone": {
+    "description": "Download stage: done"
+  },
   "downloadPerc": "{filename} {percent}%",
   "@downloadPerc": {
     "description": "Download progress line",
     "placeholders": {
-      "filename": {"type": "String"},
-      "percent": {"type": "double", "format": "decimalPattern"}
+      "filename": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "double",
+        "format": "decimalPattern"
+      }
     }
   },
-
   "asrSaveAndDownload": "保存并下载模型",
-  "@asrSaveAndDownload": {"description": "Button: save preset and download models"},
-
-  "asrSettingsDownloadHint": "首次使用需要下载模型文件（约 100–400 MB），请保持网络连接。",
-  "@asrSettingsDownloadHint": {"description": "Hint about downloading model files"},
-
+  "@asrSaveAndDownload": {
+    "description": "Button: save preset and download models"
+  },
   "alarmScheduled": "已为「{title}」设置 {time} 的提醒",
   "@alarmScheduled": {
     "description": "Confirmation message after alarm scheduled",
     "placeholders": {
-      "title": {"type": "String"},
-      "time": {"type": "String"}
+      "title": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
     }
   },
-
   "mainSetAlarm": "设置提醒",
-  "@mainSetAlarm": {"description": "Button: schedule an alarm for this task deadline"},
-
+  "@mainSetAlarm": {
+    "description": "Button: schedule an alarm for this task deadline"
+  },
   "mainNoAlarm": "不设置提醒",
-  "@mainNoAlarm": {"description": "Button: skip alarm, just save deadline"}
+  "@mainNoAlarm": {
+    "description": "Button: skip alarm, just save deadline"
+  },
+  "setupUsageAccessTitle": "屏幕使用情况权限",
+  "@setupUsageAccessTitle": {
+    "description": "Setup step: usage access title"
+  },
+  "setupUsageAccessDesc": "允许老母亲读取 Android 的屏幕使用统计，以便生成每日工作与应用使用图表。",
+  "@setupUsageAccessDesc": {
+    "description": "Setup step: usage access description"
+  },
+  "setupUsageAccessGrant": "打开使用情况访问设置",
+  "@setupUsageAccessGrant": {
+    "description": "Button to open Android usage access settings"
+  },
+  "analyticsUsagePermissionTitle": "开启屏幕使用情况访问",
+  "@analyticsUsagePermissionTitle": {
+    "description": "Title for analytics permission prompt"
+  },
+  "analyticsUsagePermissionDesc": "授予 Android 使用情况访问权限后，统计页将显示按应用和总量汇总的屏幕使用图表。",
+  "@analyticsUsagePermissionDesc": {
+    "description": "Description for analytics permission prompt"
+  },
+  "analyticsUsagePermissionAction": "打开系统设置",
+  "@analyticsUsagePermissionAction": {
+    "description": "Button to open Android usage access settings"
+  },
+  "analyticsScreenAppsTitle": "近期按应用的屏幕使用时长",
+  "@analyticsScreenAppsTitle": {
+    "description": "Title for screen time by app chart"
+  },
+  "analyticsScreenAppsDesc": "堆叠柱状图展示你最近每天的屏幕时间分别花在了哪些应用上。",
+  "@analyticsScreenAppsDesc": {
+    "description": "Description for screen time by app chart"
+  },
+  "analyticsScreenTotalsTitle": "近期每日屏幕总时长",
+  "@analyticsScreenTotalsTitle": {
+    "description": "Title for daily screen total chart"
+  },
+  "analyticsScreenTotalsDesc": "柱状图展示你最近每个日期的总屏幕使用时长。",
+  "@analyticsScreenTotalsDesc": {
+    "description": "Description for daily screen total chart"
+  },
+  "analyticsWorkVsScreenTitle": "工作时长 vs 屏幕时长",
+  "@analyticsWorkVsScreenTitle": {
+    "description": "Title for work versus screen comparison chart"
+  },
+  "analyticsWorkVsScreenDesc": "分组柱状图对比你每天记录的任务工作时长与总屏幕使用时长。",
+  "@analyticsWorkVsScreenDesc": {
+    "description": "Description for work versus screen comparison chart"
+  },
+  "analyticsScreenUnavailable": "尚未授予 Android 使用情况访问权限，暂时无法显示屏幕使用数据。",
+  "@analyticsScreenUnavailable": {
+    "description": "Fallback text when screen usage data is unavailable"
+  }
 }

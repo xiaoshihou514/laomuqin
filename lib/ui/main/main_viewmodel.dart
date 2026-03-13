@@ -16,46 +16,28 @@ enum InputFlowState { idle, awaitingDeadline }
 
 class MainViewModel extends ChangeNotifier {
   MainViewModel({
-    required SettingsRepository settingsRepository,
     required TaskRepository taskRepository,
     required TimerSessionRepository timerSessionRepository,
-  })  : _settingsRepository = settingsRepository,
-        _taskRepository = taskRepository,
-        _timerSessionRepository = timerSessionRepository {
+    required SettingsRepository settingsRepository,
+  })  : _taskRepository = taskRepository,
+        _timerSessionRepository = timerSessionRepository,
+        _settingsRepository = settingsRepository {
     load = Command0(_load)..execute();
     submitTask = Command1<String, void>(_submitTask);
     confirmDeadline = Command1<(DateTime?, bool), void>(_confirmDeadline);
     startTask = Command1<String, void>(_startTask);
     askTasks = Command0(_askTasks);
-
-    _asrSub = settingsRepository.asrStream.listen((enabled) {
-      _asrEnabled = enabled;
-      notifyListeners();
-    });
-    _asrModelSub = settingsRepository.asrModelStream.listen((json) {
-      _asrModelSettingsJson = json;
-      notifyListeners();
-    });
   }
 
-  final SettingsRepository _settingsRepository;
   final TaskRepository _taskRepository;
   final TimerSessionRepository _timerSessionRepository;
-
-  late final StreamSubscription<bool> _asrSub;
-  late final StreamSubscription<String?> _asrModelSub;
+  final SettingsRepository _settingsRepository;
 
   final List<ChatMessage> _messages = [];
   List<ChatMessage> get messages => List.unmodifiable(_messages);
 
   InputFlowState _flowState = InputFlowState.idle;
   InputFlowState get flowState => _flowState;
-
-  bool _asrEnabled = false;
-  bool get asrEnabled => _asrEnabled;
-
-  String? _asrModelSettingsJson;
-  String? get asrModelSettingsJson => _asrModelSettingsJson;
 
   String? _pendingTaskTitle;
 
@@ -67,22 +49,8 @@ class MainViewModel extends ChangeNotifier {
 
   List<Task> get timerCandidates => _sortedPendingTasks();
 
-  @override
-  void dispose() {
-    _asrSub.cancel();
-    _asrModelSub.cancel();
-    super.dispose();
-  }
 
   Future<Result<void>> _load() async {
-    final asrResult = await _settingsRepository.isAsrEnabled();
-    if (asrResult is Ok<bool>) {
-      _asrEnabled = asrResult.value;
-    }
-    final modelResult = await _settingsRepository.getAsrModelSettings();
-    if (modelResult is Ok<String?>) {
-      _asrModelSettingsJson = modelResult.value;
-    }
     await _taskRepository.loadTasks();
     await _timerSessionRepository.loadSessions();
     _addMessage(ChatMessage(
@@ -178,8 +146,8 @@ class MainViewModel extends ChangeNotifier {
         storedIndex = value;
       }
 
-      if (storedSignature == currentSignature && storedIndex != null) {
-        nextIndex = storedIndex;
+      if (storedSignature == currentSignature) {
+        nextIndex = storedIndex ?? 0;
       }
 
       if (nextIndex >= pending.length) {

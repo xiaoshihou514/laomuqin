@@ -1,11 +1,17 @@
 import '../../utils/command.dart';
+import '../models/screen_usage.dart';
 import '../models/timer_analytics.dart';
+import 'screen_usage_repository.dart';
 import 'timer_session_repository.dart';
 
 class TimerAnalyticsRepository {
-  TimerAnalyticsRepository(this._timerSessionRepository);
+  TimerAnalyticsRepository(
+    this._timerSessionRepository,
+    this._screenUsageRepository,
+  );
 
   final TimerSessionRepository _timerSessionRepository;
+  final ScreenUsageRepository _screenUsageRepository;
 
   Future<Result<TimerAnalyticsSnapshot>> loadAnalytics({
     int recentDayCount = 7,
@@ -97,12 +103,127 @@ class TimerAnalyticsRepository {
           )
           .toList();
 
+      final screenUsageResult = await _screenUsageRepository.loadRecentSnapshots(
+        recentDayCount: recentDayCount,
+      );
+      final screenUsageAccessGranted = switch (screenUsageResult) {
+        Ok<ScreenUsageLoadResult>(:final value) => value.granted,
+        _ => false,
+      };
+      final screenSnapshots = switch (screenUsageResult) {
+        Ok<ScreenUsageLoadResult>(:final value) => value.snapshots,
+        _ => const <ScreenUsageDaySnapshot>[],
+      };
+
+      final screenSeriesTotals = <String, int>{};
+      final screenLabels = <String, String>{};
+      for (final snapshot in screenSnapshots) {
+        for (final entry in snapshot.entries) {
+          screenSeriesTotals[entry.packageName] =
+              (screenSeriesTotals[entry.packageName] ?? 0) +
+                  entry.totalForegroundMs;
+          screenLabels[entry.packageName] = entry.appLabel;
+        }
+      }
+
+      final sortedScreenSeries = screenSeriesTotals.entries.toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+      final topKeys = sortedScreenSeries.take(5).map((entry) => entry.key).toSet();
+      const otherKey = '__other__';
+
+      final otherTotalMs = sortedScreenSeries
+          .skip(5)
+          .fold<int>(0, (sum, entry) => sum + entry.value);
+
+      final screenSeries = [
+        ...sortedScreenSeries.take(5).map(
+              (entry) => TimerAnalyticsSeries(
+                key: entry.key,
+                label: screenLabels[entry.key] ?? entry.key,
+                totalSeconds: entry.value ~/ 1000,
+              ),
+            ),
+        if (otherTotalMs > 0)
+          const TimerAnalyticsSeries(
+            key: otherKey,
+            label: 'Other',
+            totalSeconds: 0,
+          ),
+      ].map((series) {
+        if (series.key != otherKey) return series;
+        return TimerAnalyticsSeries(
+          key: series.key,
+          label: series.label,
+          totalSeconds: otherTotalMs ~/ 1000,
+        );
+      }).toList();
+
+      final screenSnapshotMap = {
+        for (final snapshot in screenSnapshots) _startOfDay(snapshot.day): snapshot,
+      };
+
+      final screenDailyAppStacks = recentDays.map((day) {
+        final snapshot = screenSnapshotMap[day];
+        if (snapshot == null) {
+          return DailyAppUsageStack(
+            day: day,
+            millisecondsBySeries: const {},
+            totalMilliseconds: 0,
+          );
+        }
+
+        final millisecondsBySeries = <String, int>{};
+        var otherTotal = 0;
+        for (final entry in snapshot.entries) {
+          if (topKeys.contains(entry.packageName)) {
+            millisecondsBySeries[entry.packageName] =
+                (millisecondsBySeries[entry.packageName] ?? 0) +
+                    entry.totalForegroundMs;
+          } else {
+            otherTotal += entry.totalForegroundMs;
+          }
+        }
+        if (otherTotal > 0) {
+          millisecondsBySeries[otherKey] = otherTotal;
+        }
+        return DailyAppUsageStack(
+          day: day,
+          millisecondsBySeries: millisecondsBySeries,
+          totalMilliseconds: snapshot.totalForegroundMs,
+        );
+      }).toList();
+
+      final screenDailyTotals = recentDays
+          .map(
+            (day) => DailyScreenTimeBucket(
+              day: day,
+              totalMilliseconds: screenSnapshotMap[day]?.totalForegroundMs ?? 0,
+            ),
+          )
+          .toList();
+
+      final workScreenComparisons = recentDays
+          .map(
+            (day) => DailyWorkScreenComparison(
+              day: day,
+              workSeconds: dailyTotals[day] ?? 0,
+              screenMilliseconds:
+                  screenSnapshotMap[day]?.totalForegroundMs ?? 0,
+            ),
+          )
+          .toList();
+
       return Result.ok(
         TimerAnalyticsSnapshot(
           series: series,
           dailyTaskStacks: dailyStacks,
           hourlyBuckets: hourlyBuckets,
           dailyTotals: dailyTotalBuckets,
+          screenUsageAccessGranted: screenUsageAccessGranted,
+          screenSeries: screenSeries,
+          screenDailyAppStacks: screenDailyAppStacks,
+          screenDailyTotals: screenDailyTotals,
+          workScreenComparisons: workScreenComparisons,
         ),
       );
     } on Exception catch (e) {
