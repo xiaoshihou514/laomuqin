@@ -1,0 +1,53 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  publish:
+    name: Publish for ${{ matrix.config.target }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      matrix:
+        config:
+          - os: ubuntu-latest
+            files: build/app/outputs/flutter-apk/app-*-release.apk
+            target: Android
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter SDK
+        uses: flutter-actions/setup-flutter@v4
+        with:
+          channel: stable
+
+      - name: Setup Gradle
+        if: matrix.config.target == 'Android'
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.14"
+
+      - name: Setup Android NDK
+        if: matrix.config.target == 'Android'
+        uses: android-actions/setup-android@v3
+        with:
+          packages: "ndk;27.2.12479018"
+
+      - name: Build Android
+        if: matrix.config.target == 'Android'
+        run: |
+          set -ex
+          flutter config --no-analytics
+          flutter pub get
+          flutter build apk --split-per-abi
+
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: ${{ matrix.config.files }}
+          tag: ${{ github.ref }}
+          file_glob: true
+          overwrite: true
