@@ -258,6 +258,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsThemeDark => 'Dark';
 
   @override
+  String get settingsAnalytics => 'Work analytics';
+
+  @override
+  String get settingsAnalyticsDesc => 'View recent timer-based work charts';
+
+  @override
   String get settingsExportTasks => 'Export tasks';
 
   @override
@@ -271,6 +277,37 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settingsExportTasksFailed => 'Failed to export tasks';
+
+  @override
+  String get analyticsTitle => 'Work analytics';
+
+  @override
+  String get analyticsEmptyTitle => 'No timer data yet';
+
+  @override
+  String get analyticsEmptyDesc =>
+      'Start and stop a few task timers, then come back to see your work patterns.';
+
+  @override
+  String get analyticsRecentByTaskTitle => 'Recent work by day';
+
+  @override
+  String get analyticsRecentByTaskDesc =>
+      'Stacked bars show how much time you worked each recent day and on which tasks.';
+
+  @override
+  String get analyticsHourlyTitle => 'Usual work hours';
+
+  @override
+  String get analyticsHourlyDesc =>
+      'Bars show how much tracked time started in each hour of the day.';
+
+  @override
+  String get analyticsDailyTotalsTitle => 'Recent daily totals';
+
+  @override
+  String get analyticsDailyTotalsDesc =>
+      'Bars show your total tracked work time for each recent date.';
 
   @override
   String get asrRecordLive => 'Recognising…';

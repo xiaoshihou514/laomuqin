@@ -263,6 +263,12 @@
   "settingsThemeDark": "深色",
   "@settingsThemeDark": {"description": "Settings: theme option - dark"},
 
+  "settingsAnalytics": "工作统计",
+  "@settingsAnalytics": {"description": "Settings entry for timer analytics page"},
+
+  "settingsAnalyticsDesc": "查看基于计时记录的近期工作图表",
+  "@settingsAnalyticsDesc": {"description": "Settings entry description for analytics"},
+
   "settingsExportTasks": "导出任务",
   "@settingsExportTasks": {"description": "Settings action to export tasks to JSON"},
 
@@ -279,6 +285,33 @@
 
   "settingsExportTasksFailed": "导出任务失败",
   "@settingsExportTasksFailed": {"description": "Snackbar after export task failure"},
+
+  "analyticsTitle": "工作统计",
+  "@analyticsTitle": {"description": "Analytics page title"},
+
+  "analyticsEmptyTitle": "还没有计时数据",
+  "@analyticsEmptyTitle": {"description": "Empty state title for analytics page"},
+
+  "analyticsEmptyDesc": "先开始并结束几次任务计时，再回来查看你的工作规律。",
+  "@analyticsEmptyDesc": {"description": "Empty state description for analytics page"},
+
+  "analyticsRecentByTaskTitle": "近期每日工作",
+  "@analyticsRecentByTaskTitle": {"description": "Title for recent daily stacked work chart"},
+
+  "analyticsRecentByTaskDesc": "堆叠柱状图展示你最近每天工作了多久，以及分别花在了哪些任务上。",
+  "@analyticsRecentByTaskDesc": {"description": "Description for recent daily stacked work chart"},
+
+  "analyticsHourlyTitle": "常用工作时段",
+  "@analyticsHourlyTitle": {"description": "Title for hourly work habit chart"},
+
+  "analyticsHourlyDesc": "柱状图展示你通常会在一天中的哪个小时开始投入工作。",
+  "@analyticsHourlyDesc": {"description": "Description for hourly work habit chart"},
+
+  "analyticsDailyTotalsTitle": "近期每日总量",
+  "@analyticsDailyTotalsTitle": {"description": "Title for recent daily total chart"},
+
+  "analyticsDailyTotalsDesc": "柱状图展示你最近每个日期的总工作时长。",
+  "@analyticsDailyTotalsDesc": {"description": "Description for recent daily total chart"},
 
   "asrRecordLive": "识别中…",
   "@asrRecordLive": {"description": "Live ASR partial result label"},

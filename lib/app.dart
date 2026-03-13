@@ -5,6 +5,8 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/task_repository.dart';
+import 'data/repositories/timer_analytics_repository.dart';
+import 'data/repositories/timer_session_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'ui/main/main_page.dart';
 import 'ui/main/main_viewmodel.dart';
@@ -17,6 +19,8 @@ class App extends StatelessWidget {
     super.key,
     required this.settingsRepository,
     required this.taskRepository,
+    required this.timerSessionRepository,
+    required this.timerAnalyticsRepository,
     required this.setupViewModel,
     required this.mainViewModel,
     required this.settingsViewModel,
@@ -25,6 +29,8 @@ class App extends StatelessWidget {
 
   final SettingsRepository settingsRepository;
   final TaskRepository taskRepository;
+  final TimerSessionRepository timerSessionRepository;
+  final TimerAnalyticsRepository timerAnalyticsRepository;
   final SetupViewModel setupViewModel;
   final MainViewModel mainViewModel;
   final SettingsViewModel settingsViewModel;
@@ -34,6 +40,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider.value(value: timerSessionRepository),
+        Provider.value(value: timerAnalyticsRepository),
         ChangeNotifierProvider.value(value: setupViewModel),
         ChangeNotifierProvider.value(value: mainViewModel),
         ChangeNotifierProvider.value(value: settingsViewModel),

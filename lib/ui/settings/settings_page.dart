@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../data/repositories/timer_analytics_repository.dart';
 import '../../utils/command.dart';
 import '../../l10n/app_localizations.dart';
+import '../analytics/analytics_page.dart';
+import '../analytics/analytics_viewmodel.dart';
 import 'asr_settings_page.dart';
 import 'settings_viewmodel.dart';
 
@@ -111,6 +114,34 @@ class _SettingsView extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ]),
+          const SizedBox(height: 4),
+          sectionCard([
+            ListTile(
+              leading: const Icon(Icons.bar_chart_outlined),
+              title: Text(l10n.settingsAnalytics),
+              subtitle: Text(
+                l10n.settingsAnalyticsDesc,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+              ),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: colorScheme.onSurfaceVariant,
+              ),
+              onTap: () {
+                final repo = context.read<TimerAnalyticsRepository>();
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => ChangeNotifierProvider(
+                      create: (_) => AnalyticsViewModel(repo),
+                      child: const AnalyticsPage(),
+                    ),
+                  ),
+                );
+              },
             ),
           ]),
           const SizedBox(height: 4),
@@ -239,4 +270,3 @@ class _ThemeModeSelector extends StatelessWidget {
     );
   }
 }
-

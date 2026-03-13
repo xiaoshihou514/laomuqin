@@ -560,6 +560,18 @@ abstract class AppLocalizations {
   /// **'深色'**
   String get settingsThemeDark;
 
+  /// Settings entry for timer analytics page
+  ///
+  /// In zh, this message translates to:
+  /// **'工作统计'**
+  String get settingsAnalytics;
+
+  /// Settings entry description for analytics
+  ///
+  /// In zh, this message translates to:
+  /// **'查看基于计时记录的近期工作图表'**
+  String get settingsAnalyticsDesc;
+
   /// Settings action to export tasks to JSON
   ///
   /// In zh, this message translates to:
@@ -583,6 +595,60 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'导出任务失败'**
   String get settingsExportTasksFailed;
+
+  /// Analytics page title
+  ///
+  /// In zh, this message translates to:
+  /// **'工作统计'**
+  String get analyticsTitle;
+
+  /// Empty state title for analytics page
+  ///
+  /// In zh, this message translates to:
+  /// **'还没有计时数据'**
+  String get analyticsEmptyTitle;
+
+  /// Empty state description for analytics page
+  ///
+  /// In zh, this message translates to:
+  /// **'先开始并结束几次任务计时，再回来查看你的工作规律。'**
+  String get analyticsEmptyDesc;
+
+  /// Title for recent daily stacked work chart
+  ///
+  /// In zh, this message translates to:
+  /// **'近期每日工作'**
+  String get analyticsRecentByTaskTitle;
+
+  /// Description for recent daily stacked work chart
+  ///
+  /// In zh, this message translates to:
+  /// **'堆叠柱状图展示你最近每天工作了多久，以及分别花在了哪些任务上。'**
+  String get analyticsRecentByTaskDesc;
+
+  /// Title for hourly work habit chart
+  ///
+  /// In zh, this message translates to:
+  /// **'常用工作时段'**
+  String get analyticsHourlyTitle;
+
+  /// Description for hourly work habit chart
+  ///
+  /// In zh, this message translates to:
+  /// **'柱状图展示你通常会在一天中的哪个小时开始投入工作。'**
+  String get analyticsHourlyDesc;
+
+  /// Title for recent daily total chart
+  ///
+  /// In zh, this message translates to:
+  /// **'近期每日总量'**
+  String get analyticsDailyTotalsTitle;
+
+  /// Description for recent daily total chart
+  ///
+  /// In zh, this message translates to:
+  /// **'柱状图展示你最近每个日期的总工作时长。'**
+  String get analyticsDailyTotalsDesc;
 
   /// Live ASR partial result label
   ///

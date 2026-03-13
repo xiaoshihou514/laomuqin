@@ -4,6 +4,7 @@ import 'app.dart';
 import 'data/repositories/export_repository.dart';
 import 'data/repositories/settings_repository.dart';
 import 'data/repositories/task_repository.dart';
+import 'data/repositories/timer_analytics_repository.dart';
 import 'data/repositories/timer_session_repository.dart';
 import 'data/services/alarm_service.dart';
 import 'data/services/export_service.dart';
@@ -26,6 +27,8 @@ void main() async {
   final settingsRepository = SettingsRepository(prefsService);
   final taskRepository = TaskRepository();
   final timerSessionRepository = TimerSessionRepository();
+  final timerAnalyticsRepository =
+      TimerAnalyticsRepository(timerSessionRepository);
   final exportRepository = ExportRepository(ExportService());
 
   final onboardingResult = await settingsRepository.isOnboardingDone();
@@ -55,6 +58,8 @@ void main() async {
   runApp(App(
     settingsRepository: settingsRepository,
     taskRepository: taskRepository,
+    timerSessionRepository: timerSessionRepository,
+    timerAnalyticsRepository: timerAnalyticsRepository,
     setupViewModel: setupViewModel,
     mainViewModel: mainViewModel,
     settingsViewModel: settingsViewModel,

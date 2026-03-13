@@ -252,6 +252,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsThemeDark => '深色';
 
   @override
+  String get settingsAnalytics => '工作统计';
+
+  @override
+  String get settingsAnalyticsDesc => '查看基于计时记录的近期工作图表';
+
+  @override
   String get settingsExportTasks => '导出任务';
 
   @override
@@ -264,6 +270,33 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsExportTasksFailed => '导出任务失败';
+
+  @override
+  String get analyticsTitle => '工作统计';
+
+  @override
+  String get analyticsEmptyTitle => '还没有计时数据';
+
+  @override
+  String get analyticsEmptyDesc => '先开始并结束几次任务计时，再回来查看你的工作规律。';
+
+  @override
+  String get analyticsRecentByTaskTitle => '近期每日工作';
+
+  @override
+  String get analyticsRecentByTaskDesc => '堆叠柱状图展示你最近每天工作了多久，以及分别花在了哪些任务上。';
+
+  @override
+  String get analyticsHourlyTitle => '常用工作时段';
+
+  @override
+  String get analyticsHourlyDesc => '柱状图展示你通常会在一天中的哪个小时开始投入工作。';
+
+  @override
+  String get analyticsDailyTotalsTitle => '近期每日总量';
+
+  @override
+  String get analyticsDailyTotalsDesc => '柱状图展示你最近每个日期的总工作时长。';
 
   @override
   String get asrRecordLive => '识别中…';
